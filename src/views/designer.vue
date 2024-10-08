@@ -1,56 +1,26 @@
 <script setup lang="ts">
   import {onMounted} from "vue";
   import {Graph} from "@antv/x6";
-  import ERNodeNew from "../components/ERNodeNew.vue";
+  import ERNode from "../components/ERNode.vue";
   import { register, getTeleport } from '@antv/x6-vue-shape'
+  import {registerPortLayout} from "../utils/RegisterPortLayout.ts";
 
   register({
     shape: 'er-node',
-    component: ERNodeNew,
+    component: ERNode,
   })
 
-  Graph.registerPortLayout(
-      'leftPortPosition',
-      (portsPositionArgs) => {
-        return portsPositionArgs.map((_, index) => {
-          return {
-            position: {
-              x: 0,
-              y: (index + 1) * 20,
-            },
-            angle: 0,
-          }
-        })
-      },
-      true,
-  )
-
-  Graph.registerPortLayout(
-      'rightPortPosition',
-      (portsPositionArgs) => {
-        return portsPositionArgs.map((_, index) => {
-          console.log('nodeW', _.nodeW, _.nodeX)
-          return {
-            position: {
-              x: _.nodeW,
-              y: (index + 1) * 20,
-            },
-            angle: 0,
-          }
-        })
-      },
-      true,
-  )
+  registerPortLayout()
 
   const TeleportContainer = getTeleport()
 
   onMounted(() => {
     const graph = new Graph({
       container: document.getElementById('container'),
-      width: 800,
-      height: 600,
+      autoResize: true,
       grid: true,
     });
+    graph.enablePanning();
 
     const node = graph.addNode({
       shape: 'er-node',
@@ -64,6 +34,7 @@
           { name: 'id', type: 'int' },
           { name: 'username', type: 'varchar' },
           { name: 'email', type: 'varchar' },
+          { name: 'address', type: 'varchar' },
         ]
       },
       ports: {
@@ -98,18 +69,14 @@
 
     // 监听节点点击事件，显示连接桩
     graph.on('node:click', ({ e, x, y, node, view }) => {
-      const fields = [
-        { name: 'id', type: 'int' },
-        { name: 'username', type: 'varchar' },
-        { name: 'email', type: 'varchar' },
-      ];
+      console.log('节点数据', node.getData());
+      let { fields } = node.getData();
       fields.forEach((field, index) => {
         if (node.hasPort(`port-left-${index}`)) {
           return;
         }
         let {x, y} = node.getPosition();
         let {width, height} = node.size();
-        console.log('节点宽度', x, y, width, height)
         node.addPort({
           group: 'left',
           id: `port-left-${index}`,
@@ -143,8 +110,6 @@
 
 <style scoped>
 .x6-graph-container {
-  width: 800px;
-  height: 600px;
   border: 1px solid #ddd;
 }
 </style>
