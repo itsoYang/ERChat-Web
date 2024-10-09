@@ -68,7 +68,6 @@ import {inject, onMounted, ref} from "vue";
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 2px;
         height: $ERNode-field-height;
         .field-name {
         }
