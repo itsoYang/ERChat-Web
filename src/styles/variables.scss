@@ -4,3 +4,10 @@ $ERNode-title-height: 30px;
 $ERNode-title-bg-color: #f1f5f9;
 $ERNode-content-bg-color: #ffffff;
 $ERNode-field-height: 24px;
+
+@mixin node-editor-table-item {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin: 5px 0;
+}
