@@ -1,28 +1,68 @@
 <script setup lang="ts">
 
   import {ref} from "vue";
-  import {Plus} from "@element-plus/icons-vue";
+  import {Plus, Minus, Check} from "@element-plus/icons-vue";
+  import {useGraph} from "../stores/useGraph.ts";
 
   const props = defineProps(['nodeEditorVisible', 'initNodeData']);
 
   const emit = defineEmits(['nodeEditorClose'])
 
-  const tmpData = ref({
-    tableName: 'Student',
-    fields: [
-      {name: 'id', type: 'varchar(36)', comment: '主键'},
-      {name: 'username', type: 'varchar(36)', comment: '学生名'},
-      {name: 'email', type: 'varchar(36)', comment: '邮箱'},
-      {name: 'address', type: 'varchar(36)', comment: '学生地址'},
-    ]
-  })
+  const nodeData = ref(props.initNodeData)
 
   const fieldAdd = () => {
-
+    nodeData.value.fields.push({
+      name: '',
+      type: '',
+      comment: ''
+    })
   }
 
-  const fieldDel = () => {
+  const fieldDel = (index) => {
+    nodeData.value.fields.splice(index, 1)
+  }
 
+  const saveNodeData = () => {
+    console.log(nodeData.value)
+    const graphStore = useGraph()
+    const graph = graphStore.graph
+    graph.addNode({
+      shape: 'er-node',
+      x: 100,
+      y: 100,
+      width: 200,
+      height: 300,
+      data: nodeData.value,
+      ports: {
+        groups: {
+          left: {
+            position: 'leftPortPosition',
+            attrs: {
+              circle: {
+                r: 5,
+                magnet: true,
+                stroke: '#5F95FF',
+                strokeWidth: 1,
+                fill: '#fff',
+              },
+            },
+          },
+          right: {
+            position: 'rightPortPosition',
+            attrs: {
+              circle: {
+                r: 5,
+                magnet: true,
+                stroke: '#5F95FF',
+                strokeWidth: 1,
+                fill: '#fff',
+              },
+            },
+          },
+        },
+      },
+    });
+    emit('nodeEditorClose')
   }
 
 </script>
@@ -36,14 +76,14 @@
             <div class="node-editor-table-name">
               <span>表名：</span>
               <el-input
-                  v-model="props.initNodeData.tableName"
+                  v-model="nodeData.tableName"
                   style="width: 240px"
               />
             </div>
             <div class="node-editor-table-comment">
               <span>描述：</span>
               <el-input
-                  v-model="props.initNodeData.comment"
+                  v-model="nodeData.tableComment"
                   style="width: 240px"
                   :rows="2"
                   type="textarea"
@@ -56,13 +96,27 @@
         <div class="node-editor-body">
           <div class="field-operator">
             <div class="field-add">
-              <el-button type="primary" :icon="Plus" circle size="small" @click="fieldAdd"></el-button>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="增加字段"
+                  placement="bottom"
+              >
+                <el-button type="primary" :icon="Plus" circle size="small" @click="fieldAdd"></el-button>
+              </el-tooltip>
             </div>
             <div class="field-del">
-              <el-button type="primary" :icon="Plus" circle size="small" @click="fieldDel"></el-button>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="完成"
+                  placement="bottom"
+              >
+                <el-button type="primary" :icon="Check" circle size="small" @click="saveNodeData"></el-button>
+              </el-tooltip>
             </div>
           </div>
-          <el-table :data="props.initNodeData.fields">
+          <el-table :data="nodeData.fields">
             <el-table-column label="字段名" width="150">
               <template #default="scope">
                 <el-input v-model="scope.row.name" />
@@ -76,6 +130,11 @@
             <el-table-column label="注释">
               <template #default="scope">
                 <el-input v-model="scope.row.comment" />
+              </template>
+            </el-table-column>
+            <el-table-column width="60">
+              <template #default="scope">
+                <el-button type="danger" :icon="Minus" circle size="small" @click="fieldDel(scope.$index)"></el-button>
               </template>
             </el-table-column>
           </el-table>

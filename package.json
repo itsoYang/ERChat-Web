@@ -1,5 +1,5 @@
 {
-  "name": "demo-vue-x6",
+  "name": "ERChat",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,6 +13,7 @@
     "@antv/x6-vue-shape": "^2.1.2",
     "@element-plus/icons-vue": "^2.3.1",
     "element-plus": "^2.8.3",
+    "pinia": "^2.2.4",
     "vue": "^3.4.37"
   },
   "devDependencies": {

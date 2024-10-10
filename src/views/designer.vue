@@ -4,6 +4,7 @@
   import ERNode from "../components/ERNode.vue";
   import { register, getTeleport } from '@antv/x6-vue-shape'
   import {registerPortLayout} from "../utils/RegisterPortLayout.ts";
+  import { useGraph } from "../stores/useGraph.ts";
 
   register({
     shape: 'er-node',
@@ -11,6 +12,8 @@
   })
 
   registerPortLayout()
+
+
 
   const TeleportContainer = getTeleport()
 
@@ -20,6 +23,11 @@
       autoResize: true,
       grid: true,
     });
+
+    const graphStore = useGraph()
+
+    graphStore.setGraph(graph)
+
     graph.enablePanning();
 
     const node = graph.addNode({
