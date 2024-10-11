@@ -1,10 +1,12 @@
 <script setup lang="ts">
   import {onMounted} from "vue";
-  import {Graph, Node} from "@antv/x6";
+  import {Graph} from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
-  import {useRegisterERNode, useRegisterPortLayout} from "../hooks/useGraphRegister.ts";
+  import { useRegisterERNode, useRegisterPortLayout } from "../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../stores/graph.ts";
-  import { useNodeClickEvent, useBlankClickEvent } from "../hooks/useEvent.ts";
+  import { useNodeClickEvent, useBlankClickEvent } from "../hooks/useGraphEvent.ts";
+  import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
+  import {INodeData} from "../types/graphTypes.ts";
 
   useRegisterERNode()
 
@@ -19,33 +21,29 @@
       grid: true,
     });
 
-    const graphStore = useGraphStore()
-
-    graphStore.setGraph(graph)
-
     graph.enablePanning();
 
-    const _node = graph.addNode({
-      shape: 'er-node',
-      x: 100,
-      y: 100,
-      width: 200,
-      height: 300,
-      data: {
-        tableName: 'Users',
-        fields: [
-          { name: 'id', type: 'int' },
-          { name: 'username', type: 'varchar' },
-          { name: 'email', type: 'varchar' },
-          { name: 'address', type: 'varchar' },
-        ]
-      }
-    });
+    const graphStore = useGraphStore()
+    graphStore.setGraph(graph)
+
+    // TODO 测试 待删除
+    let nodeData: INodeData = {
+      id: '001',
+      tableName: 'Users',
+      tableComment: '用户表',
+      fields: [
+        { name: 'id', type: 'int' , comment: '用户id'},
+        { name: 'username', type: 'varchar' , comment: '用户名'},
+        { name: 'email', type: 'varchar' , comment: '用户邮箱'},
+        { name: 'address', type: 'varchar' , comment: '用户地址'},
+      ]
+    }
+    let nodeHeight = useCalcNodeHeight(nodeData.fields);
+    console.log('初始添加节点测试', nodeData, nodeHeight)
+    useAddNode({x: 100, y: 100}, nodeHeight, nodeData)
 
     useNodeClickEvent()
-
     useBlankClickEvent()
-
   })
 
 

@@ -2,8 +2,7 @@
 
   import {ref} from "vue";
   import {Plus, Minus, Check} from "@element-plus/icons-vue";
-  import {useGraphStore} from "../stores/graph.ts";
-  import {Graph} from "@antv/x6";
+  import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
 
   const props = defineProps(['nodeEditorVisible', 'initNodeData']);
 
@@ -24,16 +23,8 @@
   }
 
   const saveNodeData = () => {
-    console.log(nodeData.value)
-    const graphStore = useGraphStore()
-    const graph: Graph = graphStore.graph as Graph
-    graph.addNode({
-      shape: 'er-node',
-      x: 100,
-      y: 100,
-      width: 200,
-      data: nodeData.value
-    });
+    let nodeHeight = useCalcNodeHeight(nodeData.value.fields);
+    useAddNode({x: 100, y: 100}, nodeHeight, nodeData.value)
     emit('nodeEditorClose')
   }
 

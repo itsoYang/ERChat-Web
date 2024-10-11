@@ -1,6 +1,7 @@
 import {Graph} from "@antv/x6";
 import {register} from "@antv/x6-vue-shape";
 import ERNode from "../components/ERNode.vue";
+import {shapeName} from "../constants/constant.ts"
 
 /**
  * 注册连接桩布局规则
@@ -44,7 +45,7 @@ export const useRegisterPortLayout = () => {
  */
 export const useRegisterERNode = () => {
     register({
-        shape: 'er-node',
+        shape: shapeName,
         component: ERNode,
         ports: {
             groups: {
