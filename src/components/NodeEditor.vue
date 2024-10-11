@@ -2,7 +2,8 @@
 
   import {ref} from "vue";
   import {Plus, Minus, Check} from "@element-plus/icons-vue";
-  import {useGraph} from "../stores/useGraph.ts";
+  import {useGraphStore} from "../stores/graph.ts";
+  import {Graph} from "@antv/x6";
 
   const props = defineProps(['nodeEditorVisible', 'initNodeData']);
 
@@ -24,43 +25,14 @@
 
   const saveNodeData = () => {
     console.log(nodeData.value)
-    const graphStore = useGraph()
-    const graph = graphStore.graph
+    const graphStore = useGraphStore()
+    const graph: Graph = graphStore.graph as Graph
     graph.addNode({
       shape: 'er-node',
       x: 100,
       y: 100,
       width: 200,
-      height: 300,
-      data: nodeData.value,
-      ports: {
-        groups: {
-          left: {
-            position: 'leftPortPosition',
-            attrs: {
-              circle: {
-                r: 5,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-              },
-            },
-          },
-          right: {
-            position: 'rightPortPosition',
-            attrs: {
-              circle: {
-                r: 5,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-              },
-            },
-          },
-        },
-      },
+      data: nodeData.value
     });
     emit('nodeEditorClose')
   }
@@ -163,6 +135,12 @@
       justify-content: flex-end;
       padding: 0 10px;
       gap: 1rem;
+      .el-button--small.is-circle {
+       @include node-editor-button-size;
+      }
+    }
+    .el-button--small.is-circle {
+      @include node-editor-button-size;
     }
   }
 </style>

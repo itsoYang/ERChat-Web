@@ -1,19 +1,14 @@
 <script setup lang="ts">
   import {onMounted} from "vue";
-  import {Graph} from "@antv/x6";
-  import ERNode from "../components/ERNode.vue";
-  import { register, getTeleport } from '@antv/x6-vue-shape'
-  import {registerPortLayout} from "../utils/RegisterPortLayout.ts";
-  import { useGraph } from "../stores/useGraph.ts";
+  import {Graph, Node} from "@antv/x6";
+  import { getTeleport } from '@antv/x6-vue-shape'
+  import {useRegisterERNode, useRegisterPortLayout} from "../hooks/useGraphRegister.ts";
+  import { useGraphStore } from "../stores/graph.ts";
+  import { useNodeClickEvent, useBlankClickEvent } from "../hooks/useEvent.ts";
 
-  register({
-    shape: 'er-node',
-    component: ERNode,
-  })
+  useRegisterERNode()
 
-  registerPortLayout()
-
-
+  useRegisterPortLayout()
 
   const TeleportContainer = getTeleport()
 
@@ -24,13 +19,13 @@
       grid: true,
     });
 
-    const graphStore = useGraph()
+    const graphStore = useGraphStore()
 
     graphStore.setGraph(graph)
 
     graph.enablePanning();
 
-    const node = graph.addNode({
+    const _node = graph.addNode({
       shape: 'er-node',
       x: 100,
       y: 100,
@@ -44,67 +39,12 @@
           { name: 'email', type: 'varchar' },
           { name: 'address', type: 'varchar' },
         ]
-      },
-      ports: {
-        groups: {
-          left: {
-            position: 'leftPortPosition',
-            attrs: {
-              circle: {
-                r: 5,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-              },
-            },
-          },
-          right: {
-            position: 'rightPortPosition',
-            attrs: {
-              circle: {
-                r: 5,
-                magnet: true,
-                stroke: '#5F95FF',
-                strokeWidth: 1,
-                fill: '#fff',
-              },
-            },
-          },
-        },
-      },
+      }
     });
 
-    // 监听节点点击事件，显示连接桩
-    graph.on('node:click', ({ e, x, y, node, view }) => {
-      console.log('节点数据', node.getData());
-      let { fields } = node.getData();
-      fields.forEach((field, index) => {
-        if (node.hasPort(`port-left-${index}`)) {
-          return;
-        }
-        let {x, y} = node.getPosition();
-        let {width, height} = node.size();
-        node.addPort({
-          group: 'left',
-          id: `port-left-${index}`,
-          args: {nodeX: x, nodeW: width}
-        });
-        node.addPort({
-          group: 'right',
-          id: `port-right-${index}`,
-          args: {nodeX: x, nodeW: width}
-        });
-      });
-    });
-    // 监听画布点击事件，隐藏连接桩
-    graph.on('blank:click', () => {
-      graph.getNodes().forEach(node => {
-        node.getPorts().forEach((port: any) => {
-          node.removePort(port.id)
-        });
-      });
-    });
+    useNodeClickEvent()
+
+    useBlankClickEvent()
 
   })
 

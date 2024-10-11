@@ -1,0 +1,6 @@
+  $el-button-size: 18px;
+
+  @mixin node-editor-button-size {
+    width: $el-button-size;
+    height: $el-button-size;
+  }
