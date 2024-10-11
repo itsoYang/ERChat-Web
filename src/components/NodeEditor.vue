@@ -3,12 +3,39 @@
   import {ref} from "vue";
   import {Plus, Minus, Check} from "@element-plus/icons-vue";
   import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
+  import {MysqlFieldType} from "../constants/DataType.ts";
+  import ItemList from "./ItemList.vue";
 
   const props = defineProps(['nodeEditorVisible', 'initNodeData']);
 
   const emit = defineEmits(['nodeEditorClose'])
 
   const nodeData = ref(props.initNodeData)
+
+  const fieldTypePopoverVisible = ref(false)
+
+  const handleMouseEnter = (inputValue) => {
+    console.log('handleMouseEnter', inputValue, fieldTypePopoverVisible.value)
+    if (!fieldTypePopoverVisible.value && !inputValue){
+      fieldTypePopoverVisible.value = true
+    }
+  }
+
+  const handleItemClick = (item, index) => {
+    nodeData.value.fields.forEach((_item, _index) => {
+      if (_index === index){
+        _item.type = item
+      }
+    })
+    fieldTypePopoverVisible.value = false
+  }
+
+  const handleFieldTypeInput = (fieldType) => {
+    console.log('handleFieldTypeInput', fieldType, fieldTypePopoverVisible)
+    if (fieldTypePopoverVisible.value && fieldType){
+      fieldTypePopoverVisible.value = false
+    }
+  }
 
   const fieldAdd = () => {
     nodeData.value.fields.push({
@@ -32,7 +59,7 @@
 
 <template>
   <div class="node-editor">
-    <el-dialog v-model="props.nodeEditorVisible" width="600" @close="$emit('nodeEditorClose')">
+    <el-dialog v-model="props.nodeEditorVisible" width="600" @close="$emit('nodeEditorClose')" :destroy-on-close="true">
       <div class="node-editor-content">
         <div class="node-editor-header">
           <div class="node-editor-header-left">
@@ -87,7 +114,14 @@
             </el-table-column>
             <el-table-column label="数据类型" width="200">
               <template #default="scope">
-                <el-input v-model="scope.row.type" />
+                <el-popover :visible="fieldTypePopoverVisible" placement="right">
+                  <template #reference>
+                    <el-input v-model="scope.row.type" @blur="fieldTypePopoverVisible = false" @focus="handleMouseEnter(scope.row.type)" @input="handleFieldTypeInput(scope.row.type)"/>
+                  </template>
+                  <template #default>
+                    <ItemList v-if="fieldTypePopoverVisible" :data="MysqlFieldType" @returnItem="(item) => handleItemClick(item, scope.$index)"/>
+                  </template>
+                </el-popover>
               </template>
             </el-table-column>
             <el-table-column label="注释">
