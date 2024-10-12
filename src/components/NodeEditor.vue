@@ -12,28 +12,38 @@
 
   const nodeData = ref(props.initNodeData)
 
-  const fieldTypePopoverVisible = ref(false)
+  const popoverVisible = ref(true)
 
-  const handleMouseEnter = (inputValue) => {
-    console.log('handleMouseEnter', inputValue, fieldTypePopoverVisible.value)
-    if (!fieldTypePopoverVisible.value && !inputValue){
-      fieldTypePopoverVisible.value = true
+  const fieldInputRef = ref(null)
+  const popoverRef = ref(null)
+
+  const fieldIndex = ref(0) // 当前编辑的字段索引
+
+  const handleMouseEnter = (inputValue, index) => {
+    fieldIndex.value = index
+    console.log('handleMouseEnter', inputValue, popoverVisible.value)
+    if (!popoverVisible.value && !inputValue){
+      popoverVisible.value = true
     }
   }
 
-  const handleItemClick = (item, index) => {
+  const handleItemClick = (item) => {
+    console.log('handleItemClick', item)
     nodeData.value.fields.forEach((_item, _index) => {
-      if (_index === index){
+      if (_index === fieldIndex.value){
         _item.type = item
       }
     })
-    fieldTypePopoverVisible.value = false
+    popoverVisible.value = false
   }
 
-  const handleFieldTypeInput = (fieldType) => {
-    console.log('handleFieldTypeInput', fieldType, fieldTypePopoverVisible)
-    if (fieldTypePopoverVisible.value && fieldType){
-      fieldTypePopoverVisible.value = false
+  const handleFieldTypeInput = (fieldType, index) => {
+    fieldIndex.value = index
+    if (!fieldType){
+      popoverVisible.value = true
+    }
+    if (popoverVisible.value && fieldType){
+      popoverVisible.value = false
     }
   }
 
@@ -114,14 +124,7 @@
             </el-table-column>
             <el-table-column label="数据类型" width="200">
               <template #default="scope">
-                <el-popover :visible="fieldTypePopoverVisible" placement="right">
-                  <template #reference>
-                    <el-input v-model="scope.row.type" @blur="fieldTypePopoverVisible = false" @focus="handleMouseEnter(scope.row.type)" @input="handleFieldTypeInput(scope.row.type)"/>
-                  </template>
-                  <template #default>
-                    <ItemList v-if="fieldTypePopoverVisible" :data="MysqlFieldType" @returnItem="(item) => handleItemClick(item, scope.$index)"/>
-                  </template>
-                </el-popover>
+                <el-input ref="fieldInputRef" v-model="scope.row.type" @blur="popoverVisible=false"  @focus="handleMouseEnter(scope.row.type, scope.$index)" @input="handleFieldTypeInput(scope.row.type, scope.$index)"/>
               </template>
             </el-table-column>
             <el-table-column label="注释">
@@ -135,6 +138,10 @@
               </template>
             </el-table-column>
           </el-table>
+          <!-- 字段类型列表 弹出框 -->
+          <el-popover :popper-style="{padding: '0'}" :visible="popoverVisible" placement="right" :virtual-ref="fieldInputRef" ref="popoverRef" effect="dark">
+            <ItemList :data="MysqlFieldType" @returnItem="handleItemClick"/>
+          </el-popover>
         </div>
       </div>
     </el-dialog>
