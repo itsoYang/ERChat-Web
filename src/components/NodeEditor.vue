@@ -12,7 +12,7 @@
 
   const nodeData = ref(props.initNodeData)
 
-  const popoverVisible = ref(true)
+  const popoverVisible = ref(false)
 
   const fieldInputRef = ref(null)
   const popoverRef = ref(null)
@@ -60,6 +60,7 @@
   }
 
   const saveNodeData = () => {
+    // 校验必填信息
     let nodeHeight = useCalcNodeHeight(nodeData.value.fields);
     useAddNode({x: 100, y: 100}, nodeHeight, nodeData.value)
     emit('nodeEditorClose')
@@ -74,14 +75,18 @@
         <div class="node-editor-header">
           <div class="node-editor-header-left">
             <div class="node-editor-table-name">
-              <span>表名：</span>
+              <div class="node-editor-field-prefix">
+                <span>表名：</span>
+              </div>
               <el-input
                   v-model="nodeData.tableName"
                   style="width: 240px"
               />
             </div>
             <div class="node-editor-table-comment">
-              <span>描述：</span>
+              <div class="node-editor-field-prefix">
+                <span>描述：</span>
+              </div>
               <el-input
                   v-model="nodeData.tableComment"
                   style="width: 240px"
@@ -117,12 +122,22 @@
             </div>
           </div>
           <el-table :data="nodeData.fields">
-            <el-table-column label="字段名" width="150">
+            <el-table-column width="150">
+              <template #header>
+                <div class="node-editor-field-prefix">
+                  <span>字段名</span>
+                </div>
+              </template>
               <template #default="scope">
                 <el-input v-model="scope.row.name" />
               </template>
             </el-table-column>
             <el-table-column label="数据类型" width="200">
+              <template #header>
+                <div class="node-editor-field-prefix" style="width: 100%;justify-content: flex-start;">
+                  <span>数据类型</span>
+                </div>
+              </template>
               <template #default="scope">
                 <el-input ref="fieldInputRef" v-model="scope.row.type" @blur="popoverVisible=false"  @focus="handleMouseEnter(scope.row.type, scope.$index)" @input="handleFieldTypeInput(scope.row.type, scope.$index)"/>
               </template>
@@ -150,6 +165,16 @@
 
 <style lang="scss" scoped>
 @import '../styles/variables.scss';
+  .node-editor-field-prefix::before {
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+  }
+  .node-editor-field-prefix {
+    display: flex;
+    justify-content: flex-end;
+    width: 55px;
+  }
   .node-editor-header {
     display: grid;
     flex-direction: column;
