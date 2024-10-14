@@ -1,10 +1,14 @@
 <script setup lang="ts">
 
-  import {ref} from "vue";
+import {getCurrentInstance, ref} from "vue";
   import {Plus, Minus, Check} from "@element-plus/icons-vue";
   import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
   import {MysqlFieldType} from "../constants/DataType.ts";
   import ItemList from "./ItemList.vue";
+  import {useEditNodeFieldValidate} from "../hooks/useValidate.ts";
+
+  const {appContext} = getCurrentInstance()
+  const $message = appContext.config.globalProperties.$message
 
   const props = defineProps(['nodeEditorVisible', 'initNodeData']);
 
@@ -18,6 +22,10 @@
   const popoverRef = ref(null)
 
   const fieldIndex = ref(0) // 当前编辑的字段索引
+
+  const handleDlgClose = () => {
+    emit('nodeEditorClose')
+  }
 
   const handleMouseEnter = (inputValue, index) => {
     fieldIndex.value = index
@@ -61,6 +69,11 @@
 
   const saveNodeData = () => {
     // 校验必填信息
+    const {validFlag, msg, fieldType, fieldIndex} = useEditNodeFieldValidate(nodeData.value)
+    if (!validFlag){
+      $message.warning(msg)
+      return
+    }
     let nodeHeight = useCalcNodeHeight(nodeData.value.fields);
     useAddNode({x: 100, y: 100}, nodeHeight, nodeData.value)
     emit('nodeEditorClose')
@@ -70,12 +83,19 @@
 
 <template>
   <div class="node-editor">
-    <el-dialog v-model="props.nodeEditorVisible" width="600" @close="$emit('nodeEditorClose')" :destroy-on-close="true">
+    <el-dialog
+        v-model="props.nodeEditorVisible"
+        width="600"
+        @close="handleDlgClose"
+        :destroy-on-close="true"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+    >
       <div class="node-editor-content">
         <div class="node-editor-header">
           <div class="node-editor-header-left">
             <div class="node-editor-table-name">
-              <div class="node-editor-field-prefix">
+              <div class="node-editor-field-prefix required">
                 <span>表名：</span>
               </div>
               <el-input
@@ -124,7 +144,7 @@
           <el-table :data="nodeData.fields">
             <el-table-column width="150">
               <template #header>
-                <div class="node-editor-field-prefix">
+                <div class="node-editor-field-prefix required">
                   <span>字段名</span>
                 </div>
               </template>
@@ -134,7 +154,7 @@
             </el-table-column>
             <el-table-column label="数据类型" width="200">
               <template #header>
-                <div class="node-editor-field-prefix" style="width: 100%;justify-content: flex-start;">
+                <div class="node-editor-field-prefix required" style="width: 100%;justify-content: flex-start;">
                   <span>数据类型</span>
                 </div>
               </template>
@@ -155,7 +175,7 @@
           </el-table>
           <!-- 字段类型列表 弹出框 -->
           <el-popover :popper-style="{padding: '0'}" :visible="popoverVisible" placement="right" :virtual-ref="fieldInputRef" ref="popoverRef" effect="dark">
-            <ItemList :data="MysqlFieldType" @returnItem="handleItemClick"/>
+            <ItemList :data="MysqlFieldType" @return-fieldType="handleItemClick"/>
           </el-popover>
         </div>
       </div>
@@ -165,7 +185,7 @@
 
 <style lang="scss" scoped>
 @import '../styles/variables.scss';
-  .node-editor-field-prefix::before {
+  .node-editor-field-prefix.required::before {
     content: '*';
     color: #f56c6c;
     margin-right: 4px;

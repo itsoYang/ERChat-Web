@@ -4,7 +4,7 @@
 
   const props = defineProps(['data'])
 
-  const emit = defineEmits(['returnItem'])
+  const emit = defineEmits(['return-fieldType'])
 
   const fieldTypes = Object.values(props.data)
 
