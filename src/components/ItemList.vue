@@ -29,7 +29,7 @@
           class="item"
           v-for="(item, index) in fieldTypes"
           :key="index"
-          @click="emit('returnItem', item)"
+          @click="emit('return-fieldType', item)"
           @mouseover="handleMouseOver(index)"
           @mouseleave="handleMouseLeave(index)"
           :class="{ 'hovered': hoveredIndex === index }"

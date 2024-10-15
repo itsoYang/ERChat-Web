@@ -24,11 +24,12 @@ import {getCurrentInstance, ref} from "vue";
   const fieldIndex = ref(0) // 当前编辑的字段索引
 
   const handleDlgClose = () => {
-    emit('nodeEditorClose')
+    emit('nodeEditorClose', false)
   }
 
-  const handleMouseEnter = (inputValue, index) => {
+  const handleMouseEnter = (e, inputValue, index) => {
     fieldIndex.value = index
+    fieldInputRef.value = e.currentTarget
     console.log('handleMouseEnter', inputValue, popoverVisible.value)
     if (!popoverVisible.value && !inputValue){
       popoverVisible.value = true
@@ -159,7 +160,7 @@ import {getCurrentInstance, ref} from "vue";
                 </div>
               </template>
               <template #default="scope">
-                <el-input ref="fieldInputRef" v-model="scope.row.type" @blur="popoverVisible=false"  @focus="handleMouseEnter(scope.row.type, scope.$index)" @input="handleFieldTypeInput(scope.row.type, scope.$index)"/>
+                <el-input ref="fieldInputRef" v-model="scope.row.type" @blur="popoverVisible=false"  @focus="(e) => handleMouseEnter(e, scope.row.type, scope.$index)" @input="handleFieldTypeInput(scope.row.type, scope.$index)"/>
               </template>
             </el-table-column>
             <el-table-column label="注释">
@@ -173,13 +174,13 @@ import {getCurrentInstance, ref} from "vue";
               </template>
             </el-table-column>
           </el-table>
-          <!-- 字段类型列表 弹出框 -->
-          <el-popover :popper-style="{padding: '0'}" :visible="popoverVisible" placement="right" :virtual-ref="fieldInputRef" ref="popoverRef" effect="dark">
-            <ItemList :data="MysqlFieldType" @return-fieldType="handleItemClick"/>
-          </el-popover>
         </div>
       </div>
     </el-dialog>
+    <!-- 字段类型列表 弹出框 -->
+    <el-popover :popper-style="{padding: '0'}" :visible="popoverVisible" placement="right" :virtual-ref="fieldInputRef" virtual-triggering ref="popoverRef" effect="dark">
+      <ItemList :data="MysqlFieldType" @return-fieldType="handleItemClick"/>
+    </el-popover>
   </div>
 </template>
 

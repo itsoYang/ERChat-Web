@@ -14,6 +14,9 @@
   const openTableConfig = () => {
     nodeEditorVisible.value = true
   }
+  const handleNodeEditorClose = (data: any) => {
+    nodeEditorVisible.value = data
+  }
 
 </script>
 
@@ -21,7 +24,7 @@
   <div class="table-editor-button" v-if="!nodeEditorVisible">
     <el-button type="primary" :icon="Plus" circle @click="openTableConfig"></el-button>
   </div>
-  <NodeEditor :nodeEditorVisible="nodeEditorVisible" @nodeEditorClose="nodeEditorVisible=false" :initNodeData="nodeData" />
+  <NodeEditor :nodeEditorVisible="nodeEditorVisible" @nodeEditorClose="handleNodeEditorClose" :initNodeData="nodeData" />
 </template>
 
 <style scoped>
