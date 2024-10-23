@@ -5,6 +5,7 @@
 
   let nodeEditorVisible = ref(false)
   let nodeData = ref({
+    id: '002',
     tableName: '',
     tableComment: '',
     fields: [

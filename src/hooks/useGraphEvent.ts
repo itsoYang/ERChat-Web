@@ -1,5 +1,52 @@
 import {useGraphStore} from "../stores/graph.ts";
-import {Graph} from "@antv/x6";
+import {Graph, Node} from "@antv/x6";
+
+
+export const useEdgeConnectedEvent = () => {
+    const graphStore = useGraphStore()
+    const graph: Graph = graphStore.graph as Graph
+    graph.on('edge:connected', ({ edge , isNew, type, currentCell,previousCell}) => {
+        // console.log('edge.getTargetCellId()', edge.getTargetCellId());
+        console.log('edge:connected', edge, isNew, type, currentCell, previousCell)
+        let {id, fields } = currentCell?.getData()
+        let targetNode: Node;
+        if (currentCell?.isNode()) {
+            graph.getNodes().forEach(node => {
+                if (node.data.id === id) {
+                    targetNode = node
+                    return;
+                }
+            })
+        }
+        // @ts-ignore
+        fields.forEach((field: any, index: number) => {
+            if (targetNode.hasPort(`port-left-${index}`)) {
+                return;
+            }
+            let {x} = targetNode.getPosition();
+            let {width} = targetNode.size();
+            targetNode.addPort({
+                group: 'left',
+                id: `port-left-${index}`,
+                args: {nodeX: x, nodeW: width}
+            });
+            targetNode.addPort({
+                group: 'right',
+                id: `port-right-${index}`,
+                args: {nodeX: x, nodeW: width}
+            });
+        });
+    })
+}
+
+export const useEdgeAddEvent = () => {
+    const graphStore = useGraphStore()
+    const graph: Graph = graphStore.graph as Graph
+    graph.on('edge:added', ({ edge, index, options }) => {
+        console.log('edge:added', edge, index, options)
+    })
+}
+
 
 /**
  * 监听节点点击事件

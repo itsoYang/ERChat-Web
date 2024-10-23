@@ -2,15 +2,17 @@
   import {onMounted} from "vue";
   import {Graph} from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
-  import { useRegisterERNode, useRegisterPortLayout } from "../hooks/useGraphRegister.ts";
+  import { useRegisterERNode, useRegisterPortLayout, useRegisterAnchor } from "../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../stores/graph.ts";
-  import { useNodeClickEvent, useBlankClickEvent } from "../hooks/useGraphEvent.ts";
+  import { useNodeClickEvent, useBlankClickEvent, useEdgeConnectedEvent,useEdgeAddEvent } from "../hooks/useGraphEvent.ts";
   import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
   import {INodeData} from "../types/graphTypes.ts";
 
   useRegisterERNode()
 
   useRegisterPortLayout()
+
+  useRegisterAnchor()
 
   const TeleportContainer = getTeleport()
 
@@ -19,6 +21,11 @@
       container: document.getElementById('container'),
       autoResize: true,
       grid: true,
+      connecting: {
+        connector: 'smooth',
+        router: 'er',
+        anchor: 'er-anchor'
+      }
     });
 
     graph.enablePanning();
@@ -39,11 +46,12 @@
       ]
     }
     let nodeHeight = useCalcNodeHeight(nodeData.fields);
-    console.log('初始添加节点测试', nodeData, nodeHeight)
     useAddNode({x: 100, y: 100}, nodeHeight, nodeData)
 
     useNodeClickEvent()
     useBlankClickEvent()
+    useEdgeConnectedEvent()
+    useEdgeAddEvent()
   })
 
 

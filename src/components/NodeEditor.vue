@@ -30,14 +30,12 @@ import {getCurrentInstance, ref} from "vue";
   const handleMouseEnter = (e, inputValue, index) => {
     fieldIndex.value = index
     fieldInputRef.value = e.currentTarget
-    console.log('handleMouseEnter', inputValue, popoverVisible.value)
     if (!popoverVisible.value && !inputValue){
       popoverVisible.value = true
     }
   }
 
   const handleItemClick = (item) => {
-    console.log('handleItemClick', item)
     nodeData.value.fields.forEach((_item, _index) => {
       if (_index === fieldIndex.value){
         _item.type = item
