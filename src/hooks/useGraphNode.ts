@@ -28,7 +28,30 @@ export const useAddNode = (point: IPoint, height: number, nodeData: INodeData) =
         data: nodeData
     }
     const graphStore = useGraphStore()
-    const graph: Graph = graphStore.graph as Graph
-    console.log('useAddNode graphNode', {...graphNode})
-    graph.addNode({...graphNode})
+    const graph: Graph | null = graphStore.graph as Graph | null
+
+    if (!graph){
+        throw new Error('Graph is not initialized')
+    }
+    const node = graph.addNode({...graphNode})
+
+    let { fields } = nodeData
+    let {x} = node.getPosition();
+    let {width} = node.size();
+
+    const addPorts = (group: string, index: number) => {
+        if (!node.hasPort(`port-${group}-${index}`)) {
+            node.addPort({
+                group,
+                id: `port-${group}-${index}`,
+                args: {nodeX: x, nodeW: width}
+            });
+        }
+    };
+
+    // @ts-ignore
+    fields.forEach((field: any, index: number) => {
+        addPorts('left', index)
+        addPorts('right', index)
+    });
 }

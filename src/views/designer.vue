@@ -2,17 +2,15 @@
   import {onMounted} from "vue";
   import {Graph} from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
-  import { useRegisterERNode, useRegisterPortLayout, useRegisterAnchor } from "../hooks/useGraphRegister.ts";
+  import { useRegisterERNode, useRegisterPortLayout } from "../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../stores/graph.ts";
-  import { useNodeClickEvent, useBlankClickEvent, useEdgeConnectedEvent,useEdgeAddEvent } from "../hooks/useGraphEvent.ts";
+  import { useNodeClickEvent, useBlankClickEvent} from "../hooks/useGraphEvent.ts";
   import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
   import {INodeData} from "../types/graphTypes.ts";
 
   useRegisterERNode()
 
   useRegisterPortLayout()
-
-  useRegisterAnchor()
 
   const TeleportContainer = getTeleport()
 
@@ -22,9 +20,11 @@
       autoResize: true,
       grid: true,
       connecting: {
+        allowPort: true,
+        allowMulti: true,
         connector: 'smooth',
         router: 'er',
-        anchor: 'er-anchor'
+        connectionPoint: 'anchor',
       }
     });
 
@@ -50,8 +50,6 @@
 
     useNodeClickEvent()
     useBlankClickEvent()
-    useEdgeConnectedEvent()
-    useEdgeAddEvent()
   })
 
 
