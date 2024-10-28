@@ -4,7 +4,7 @@
   import { getTeleport } from '@antv/x6-vue-shape'
   import { useRegisterERNode, useRegisterPortLayout } from "../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../stores/graph.ts";
-  import { useNodeClickEvent, useBlankClickEvent} from "../hooks/useGraphEvent.ts";
+  import { useNodeClickEvent, useBlankClickEvent, useNodeMovingEvent} from "../hooks/useGraphEvent.ts";
   import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
   import {INodeData} from "../types/graphTypes.ts";
 
@@ -20,10 +20,11 @@
       autoResize: true,
       grid: true,
       connecting: {
+        allowNode: false,
         allowPort: true,
         allowMulti: true,
-        connector: 'smooth',
-        router: 'er',
+        connector: 'rounded',
+        router: 'manhattan',
         connectionPoint: 'anchor',
       }
     });
@@ -47,9 +48,11 @@
     }
     let nodeHeight = useCalcNodeHeight(nodeData.fields);
     useAddNode({x: 100, y: 100}, nodeHeight, nodeData)
+    useAddNode({x: 300, y: 300}, nodeHeight, nodeData)
 
     useNodeClickEvent()
     useBlankClickEvent()
+    useNodeMovingEvent()
   })
 
 
