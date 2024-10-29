@@ -37,7 +37,9 @@ export const useBlankClickEvent = () => {
 }
 
 /**
- * 监听节点移动事件，更新连接线
+ * 监听节点移动事件，更新边的连接点
+ * 连接点ID规则 port-left-{字段索引} | port-right-{字段索引}
+ * 更新规则，节点右移或者左移时，连线的连接点需更新到节点同一个字段的另一侧
  */
 export const useNodeMovingEvent = () => {
     const graphStore = useGraphStore()
@@ -50,66 +52,68 @@ export const useNodeMovingEvent = () => {
             : pointId.replace('right', 'left');
     };
 
-    const updateEdgePorts = (edge: Edge, node: Node, targetNode: Node, isRightMove: boolean) => {
-        let sourcePortId = edge.getSourcePortId()!;
-        let targetPortId = edge.getTargetPortId()!;
+    const updateEdgePorts = (edge: Edge, node: Node, targetNode: Node, isRightMove: boolean, nodeType: string) => {
+        let sourcePortId = edge.getSourcePortId()
+        let targetPortId = edge.getTargetPortId()
 
-        if (isRightMove) {
-            if (!sourcePortId.includes('left')) {
-                sourcePortId = calcPointId(sourcePortId);
+        if (sourcePortId && targetPortId) {
+            if (nodeType === 'source'){
+                if (isRightMove) {
+                    if (!sourcePortId.includes('left')) {
+                        sourcePortId = calcPointId(sourcePortId);
+                    }
+                    if (!targetPortId.includes('right')) {
+                        targetPortId = calcPointId(targetPortId);
+                    }
+                } else {
+                    if (!sourcePortId.includes('right')) {
+                        sourcePortId = calcPointId(sourcePortId);
+                    }
+                    if (!targetPortId.includes('left')) {
+                        targetPortId = calcPointId(targetPortId);
+                    }
+                }
+            }else if (nodeType === 'target'){
+                if (isRightMove) {
+                    if (!targetPortId.includes('left')) {
+                        targetPortId = calcPointId(targetPortId);
+                    }
+                    if (!sourcePortId.includes('right')) {
+                        sourcePortId = calcPointId(sourcePortId);
+                    }
+                } else {
+                    if (!targetPortId.includes('right')) {
+                        targetPortId = calcPointId(targetPortId);
+                    }
+                    if (!sourcePortId.includes('left')) {
+                        sourcePortId = calcPointId(sourcePortId);
+                    }
+                }
             }
-            if (!targetPortId.includes('right')) {
-                targetPortId = calcPointId(targetPortId);
-            }
-        } else {
-            if (!sourcePortId.includes('right')) {
-                sourcePortId = calcPointId(sourcePortId);
-            }
-            if (!targetPortId.includes('left')) {
-                targetPortId = calcPointId(targetPortId);
-            }
+
+            edge.setSource({ cell: node.id, port: sourcePortId });
+            edge.setTarget({ cell: targetNode.id, port: targetPortId });
         }
-
-        edge.setSource({ cell: node.id, port: sourcePortId });
-        edge.setTarget({ cell: targetNode.id, port: targetPortId });
-    };
+    }
 
     graph.on('node:moving', ({ x, node }) => {
         const edges = graph.getEdges();
         edges.forEach(edge => {
             const sourceNode = edge.getSourceNode()
             const targetNode = edge.getTargetNode()
-            // if (sourceNode && targetNode){
-            //     if (sourceNode.id === node.id){
-            //         if (x > targetNode.getPosition().x + targetNode.getSize().width / 2){ // 节点右移，交换连接桩 此时移动的节点连接点由右侧变为左侧 目标节点连接点由左侧变为右侧
-            //             let sourcePortId = edge.getSourcePortId()
-            //             let targetPortId = edge.getTargetPortId()
-            //             if (sourcePortId && targetPortId){
-            //                 let _sourcePortId = sourcePortId
-            //                 let _targetPortId = targetPortId
-            //                 if (_sourcePortId.indexOf('left') === -1){
-            //                     _sourcePortId = calcPointId(_sourcePortId)
-            //                 }
-            //                 if (_targetPortId.indexOf('right') === -1){
-            //                     _targetPortId = calcPointId(_targetPortId)
-            //                 }
-            //                 edge.setSource({cell: node.id, port: _sourcePortId})
-            //                 edge.setTarget({cell: targetNode.id, port: _targetPortId})
-            //             }
-            //         }else if (x < targetNode.getPosition().x + targetNode.getSize().width / 2){ // 节点左移，交换连接桩
-            //
-            //         }
-            //     }
-            // }
             if (sourceNode && targetNode) {
-                const targetNodePosition = targetNode.getPosition();
-                const targetNodeSize = targetNode.getSize();
-                const targetNodeCenterX = targetNodePosition.x + targetNodeSize.width / 2;
+                const isSourceNode = node.id === sourceNode.id;
+                const referenceNode = isSourceNode ? targetNode : sourceNode;
+                const referenceNodePosition = referenceNode.getPosition();
+                const referenceNodeSize = referenceNode.getSize();
+                const referenceNodeCenterX = referenceNodePosition.x + referenceNodeSize.width / 2;
+                const isRightMove = x > referenceNodeCenterX;
+                const nodeType = isSourceNode ? 'source' : 'target';
 
-                if (x > targetNodeCenterX) { // 节点右移，交换连接桩
-                    updateEdgePorts(edge, node, targetNode, true);
-                } else if (x < targetNodeCenterX) { // 节点左移，交换连接桩
-                    updateEdgePorts(edge, node, targetNode, false);
+                if (isSourceNode){
+                    updateEdgePorts(edge, node, referenceNode, isRightMove, nodeType);
+                }else {
+                    updateEdgePorts(edge, referenceNode, node, isRightMove, nodeType);
                 }
             }
         })
