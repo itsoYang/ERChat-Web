@@ -2,15 +2,15 @@
   import {onMounted} from "vue";
   import {Graph} from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
-  import { useRegisterERNode, useRegisterPortLayout } from "../hooks/useGraphRegister.ts";
+  import { useRegisterERNode, useRegisterPortLayout, useRegisterArrow } from "../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../stores/graph.ts";
   import { useNodeClickEvent, useBlankClickEvent, useNodeMovingEvent} from "../hooks/useGraphEvent.ts";
   import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
   import {INodeData} from "../types/graphTypes.ts";
 
   useRegisterERNode()
-
   useRegisterPortLayout()
+  useRegisterArrow()
 
   const TeleportContainer = getTeleport()
 
@@ -53,6 +53,32 @@
     useNodeClickEvent()
     useBlankClickEvent()
     useNodeMovingEvent()
+
+    graph.addEdge({
+      source: { x: 160, y: 40 },
+      target: { x: 420, y: 40 },
+      attrs: {
+        line: {
+          stroke: '#31d0c6',
+          sourceMarker: {
+            name: 'image',
+            imageUrl: 'public/images/arrow/left.png',
+            imageWidth: 24,
+            imageHeight: 24,
+            y: -12,
+            opacity: 0.5,
+          },
+          targetMarker: {
+            name: 'image',
+            imageUrl: '/public/images/arrow/right.png',
+            imageWidth: 24,
+            imageHeight: 24,
+            y: -12,
+            opacity: 0.5,
+          },
+        },
+      },
+    })
   })
 
 
