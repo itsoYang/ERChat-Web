@@ -3,7 +3,6 @@ import {register} from "@antv/x6-vue-shape";
 import ERNode from "../components/ERNode.vue";
 import {shapeName} from "../constants/constant.ts"
 import {Attr} from "@antv/x6/es/registry";
-import {Button} from "@antv/x6/es/registry/tool/button";
 
 /**
  * 注册连接桩布局规则
@@ -114,33 +113,71 @@ const useRegisterArrow = () => {
  * 注册边工具
  */
 const registerEdgeTool = () => {
-    
-    const EdgeButton = Button.define<Button.Options>({
+
+    Graph.registerEdgeTool('edge-tool-button', {
+        inherit: 'button',
         markup: [
             {
                 tagName: 'rect',
                 selector: 'button',
                 attrs: {
-                    width: 40,
+                    width: 120,  // 根据需要调整宽度以适应所有文本
                     height: 40,
                     fill: '#31d0c6',
                     'fill-opacity': 0.3,
                     stroke: '#fe854f',
-                    'stroke-width': 4,
+                    'stroke-width': 2,
+                    'stroke-linejoin': 'round',
+                    rx: 10,  // 圆角半径
+                    ry: 10,  // 圆角半径
                     cursor: 'move',
                 },
             },
             {
                 tagName: 'text',
-                selector: 'label',
+                textContent: '1:1',
+                selector: 'label1',
+                attrs: {
+                    x: 20,  // 将文本放在框中的正确位置
+                    y: 20,
+                    'text-anchor': 'middle',
+                    'dominant-baseline': 'middle',
+                    'font-size': 14,
+                    fill: '#333',
+                    cursor: 'pointer'
+                }
+            },
+            {
+                tagName: 'text',
+                textContent: '1:N',
+                selector: 'label2',
+                attrs: {
+                    x: 60,  // 中间文本
+                    y: 20,
+                    'text-anchor': 'middle',
+                    'dominant-baseline': 'middle',
+                    'font-size': 14,
+                    fill: '#333',
+                    cursor: 'pointer'
+                }
+            },
+            {
+                tagName: 'text',
+                textContent: 'N:1',
+                selector: 'label3',
+                attrs: {
+                    x: 100,  // 右侧文本
+                    y: 20,
+                    'text-anchor': 'middle',
+                    'dominant-baseline': 'middle',
+                    'font-size': 14,
+                    fill: '#333',
+                    cursor: 'pointer'
+                }
             }
-        ]
-    })
-    
-    Graph.registerEdgeTool('edge-tool-button', {
-        inherit: 'button',
-        ...EdgeButton
-    }, true)
+        ],
+        // 其他配置，可能包括工具行为、事件等
+    }, true);
 }
 
 export const useGraphRegister = () => {

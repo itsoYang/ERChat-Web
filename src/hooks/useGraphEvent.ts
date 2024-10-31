@@ -127,10 +127,11 @@ export const useEdgeConnectedEvent = () => {
         if (isNew){
             // 边标签弹窗
             console.log(edge)
-            edge.addTools({
+            edge.addTools( {
                 name: 'edge-tool-button',
                 args: {
-                    distance: 40,
+                    distance: '50%',
+                    offset: -10
                 }
             })
         }

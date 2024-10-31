@@ -64,7 +64,7 @@
     }
     let nodeHeight = useCalcNodeHeight(nodeData.fields);
     useAddNode({x: 100, y: 100}, nodeHeight, nodeData)
-    useAddNode({x: 300, y: 300}, nodeHeight, nodeData)
+    useAddNode({x: 500, y: 300}, nodeHeight, nodeData)
 
     useNodeClickEvent()
     useBlankClickEvent()
