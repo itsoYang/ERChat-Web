@@ -119,3 +119,20 @@ export const useNodeMovingEvent = () => {
         })
     })
 }
+
+export const useEdgeConnectedEvent = () => {
+    const graphStore = useGraphStore()
+    const graph: Graph = graphStore.graph as Graph
+    graph.on('edge:connected', ({ isNew, edge }) => {
+        if (isNew){
+            // 边标签弹窗
+            console.log(edge)
+            edge.addTools({
+                name: 'edge-tool-button',
+                args: {
+                    distance: 40,
+                }
+            })
+        }
+    })
+}

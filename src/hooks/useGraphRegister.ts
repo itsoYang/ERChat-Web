@@ -2,12 +2,13 @@ import {Graph} from "@antv/x6";
 import {register} from "@antv/x6-vue-shape";
 import ERNode from "../components/ERNode.vue";
 import {shapeName} from "../constants/constant.ts"
-import {Attr} from "@antv/x6/lib/registry";
+import {Attr} from "@antv/x6/es/registry";
+import {Button} from "@antv/x6/es/registry/tool/button";
 
 /**
  * 注册连接桩布局规则
  */
-export const useRegisterPortLayout = () => {
+const useRegisterPortLayout = () => {
     Graph.registerPortLayout(
         'leftPortPosition',
         (portsPositionArgs) => {
@@ -44,7 +45,7 @@ export const useRegisterPortLayout = () => {
 /**
  * 注册ERNode
  */
-export const useRegisterERNode = () => {
+const useRegisterERNode = () => {
     register({
         shape: shapeName,
         component: ERNode,
@@ -81,10 +82,12 @@ export const useRegisterERNode = () => {
     })
 }
 
+
 /**
- * 注册image-er箭头
+ * 注册image-er箭头（暂时不用，箭头效果不好）
  */
-export const useRegisterArrow = () => {
+// @ts-ignore
+const useRegisterArrow = () => {
 
     /**
      * 参数定义
@@ -105,4 +108,46 @@ export const useRegisterArrow = () => {
             'xlink:href': imageUrl,
         }
     }, true)
+}
+
+/**
+ * 注册边工具
+ */
+const registerEdgeTool = () => {
+    
+    const EdgeButton = Button.define<Button.Options>({
+        markup: [
+            {
+                tagName: 'rect',
+                selector: 'button',
+                attrs: {
+                    width: 40,
+                    height: 40,
+                    fill: '#31d0c6',
+                    'fill-opacity': 0.3,
+                    stroke: '#fe854f',
+                    'stroke-width': 4,
+                    cursor: 'move',
+                },
+            },
+            {
+                tagName: 'text',
+                selector: 'label',
+            }
+        ]
+    })
+    
+    Graph.registerEdgeTool('edge-tool-button', {
+        inherit: 'button',
+        ...EdgeButton
+    }, true)
+}
+
+export const useGraphRegister = () => {
+    // 注册连接桩布局
+    useRegisterPortLayout()
+    // 注册ERNode
+    useRegisterERNode()
+    // 注册边工具
+    registerEdgeTool()
 }
