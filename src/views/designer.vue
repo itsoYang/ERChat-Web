@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import {onMounted} from "vue";
-  import {Graph} from "@antv/x6";
+  import {Graph, Shape} from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
   import { useRegisterERNode, useRegisterPortLayout, useRegisterArrow } from "../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../stores/graph.ts";
@@ -20,12 +20,29 @@
       autoResize: true,
       grid: true,
       connecting: {
+        snap: {
+          radius: 5,
+        },
+        allowBlank: false,
         allowNode: false,
+        allowEdge: false,
+        allowLoop: false,
         allowPort: true,
         allowMulti: true,
         connector: 'rounded',
         router: 'manhattan',
         connectionPoint: 'anchor',
+        createEdge() {
+          return new Shape.Edge({
+            attrs: {
+              line: {
+                stroke: '#A2B1C3',
+                strokeWidth: 2,
+                targetMarker: null
+              },
+            },
+          })
+        },
       }
     });
 
@@ -53,32 +70,6 @@
     useNodeClickEvent()
     useBlankClickEvent()
     useNodeMovingEvent()
-
-    graph.addEdge({
-      source: { x: 160, y: 40 },
-      target: { x: 420, y: 40 },
-      attrs: {
-        line: {
-          stroke: '#31d0c6',
-          sourceMarker: {
-            name: 'image',
-            imageUrl: 'public/images/arrow/left.png',
-            imageWidth: 24,
-            imageHeight: 24,
-            y: -12,
-            opacity: 0.5,
-          },
-          targetMarker: {
-            name: 'image',
-            imageUrl: '/public/images/arrow/right.png',
-            imageWidth: 24,
-            imageHeight: 24,
-            y: -12,
-            opacity: 0.5,
-          },
-        },
-      },
-    })
   })
 
 
