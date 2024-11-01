@@ -5,9 +5,7 @@ import {Graph, Edge, Node} from "@antv/x6";
 /**
  * 监听节点点击事件
  */
-export const useNodeClickEvent = () => {
-    const graphStore = useGraphStore()
-    const graph: Graph = graphStore.graph as Graph
+const useNodeClickEvent = (graph: Graph) => {
     // 监听节点点击事件，显示连接桩
     graph.on('node:click', ({ node }) => {
         const visibility = 1
@@ -21,9 +19,7 @@ export const useNodeClickEvent = () => {
 /**
  * 监听画布空白处点击事件
  */
-export const useBlankClickEvent = () => {
-    const graphStore = useGraphStore()
-    const graph: Graph = graphStore.graph as Graph
+const useBlankClickEvent = (graph: Graph) => {
     // 监听画布点击事件，隐藏连接桩
     graph.on('blank:click', () => {
         graph.getNodes().forEach(node => {
@@ -41,9 +37,7 @@ export const useBlankClickEvent = () => {
  * 连接点ID规则 port-left-{字段索引} | port-right-{字段索引}
  * 更新规则，节点右移或者左移时，连线的连接点需更新到节点同一个字段的另一侧
  */
-export const useNodeMovingEvent = () => {
-    const graphStore = useGraphStore()
-    const graph: Graph = graphStore.graph as Graph
+const useNodeMovingEvent = (graph: Graph) => {
 
     // 计算连接桩ID
     const calcPointId = (pointId: string): string => {
@@ -120,20 +114,42 @@ export const useNodeMovingEvent = () => {
     })
 }
 
-export const useEdgeConnectedEvent = () => {
-    const graphStore = useGraphStore()
-    const graph: Graph = graphStore.graph as Graph
+/**
+ * 监听连线连接事件
+ */
+const useEdgeConnectedEvent = (graph: Graph) => {
     graph.on('edge:connected', ({ isNew, edge }) => {
         if (isNew){
             // 边标签弹窗
-            console.log(edge)
+            // edge.addTools( {
+            //     name: 'edge-tool-button',
+            //     args: {
+            //         distance: '50%',
+            //         offset: -10
+            //     },
+            // })
             edge.addTools( {
                 name: 'edge-tool-button',
                 args: {
-                    distance: '50%',
-                    offset: -10
-                }
+                    distance: 0.5,
+                },
             })
         }
     })
+}
+
+/**
+ * 事件监听相关
+ */
+export const useGraphEvent = () => {
+    const graphStore = useGraphStore()
+    const graph: Graph = graphStore.graph as Graph
+    // 节点点击事件
+    useNodeClickEvent(graph)
+    // 画布空白处点击事件
+    useBlankClickEvent(graph)
+    // 节点移动事件
+    useNodeMovingEvent(graph)
+    // 连线连接事件
+    useEdgeConnectedEvent(graph)
 }

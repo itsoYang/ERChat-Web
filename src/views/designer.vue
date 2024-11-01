@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import {onMounted} from "vue";
-  import {Graph, Shape} from "@antv/x6";
+  import { onMounted } from "vue";
+  import { Graph, Shape } from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
   import { useGraphRegister } from "../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../stores/graph.ts";
-  import { useNodeClickEvent, useBlankClickEvent, useNodeMovingEvent, useEdgeConnectedEvent} from "../hooks/useGraphEvent.ts";
-  import {useAddNode, useCalcNodeHeight} from "../hooks/useGraphNode.ts";
-  import {INodeData} from "../types/graphTypes.ts";
+  import { useGraphEvent } from "../hooks/useGraphEvent.ts";
+  import { useAddNode, useCalcNodeHeight } from "../hooks/useGraphNode.ts";
+  import { INodeData } from "../types/graphTypes.ts";
 
   // 注册相关
   useGraphRegister()
@@ -66,10 +66,8 @@
     useAddNode({x: 100, y: 100}, nodeHeight, nodeData)
     useAddNode({x: 500, y: 300}, nodeHeight, nodeData)
 
-    useNodeClickEvent()
-    useBlankClickEvent()
-    useNodeMovingEvent()
-    useEdgeConnectedEvent()
+    // 事件监听相关
+    useGraphEvent()
   })
 
 
