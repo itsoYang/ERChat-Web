@@ -131,7 +131,8 @@ const useEdgeConnectedEvent = (graph: Graph) => {
             edge.addTools( {
                 name: 'edge-tool-button',
                 args: {
-                    distance: 0.5,
+                    offsetX: 10,
+                    offsetY: -50
                 },
             })
         }

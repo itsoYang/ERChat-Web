@@ -1,95 +1,63 @@
 import { ToolsView, EdgeView } from '@antv/x6'
-import {Dom, NumberExt} from "@antv/x6-common";
-import {Point} from "@antv/x6-geometry";
+import EdgeTool from "../components/EdgeTool.vue";
+import { createApp } from 'vue'
 
 export class TooltipTool extends ToolsView.ToolItem<EdgeView, TooltipToolOptions> {
+
+    protected edgeToolContainer: HTMLDivElement | null = null
     protected onRender() {
-        this.createToolElement()
+        this.createEdgeTool()
         this.update()
     }
 
-    private createToolElement() {
-        const container = this.container;
-        container.innerHTML = `
-            <div style="position: relative;width: 50px; height: 40px;">
-                <button id="button1">Button 1</button>
-                <button id="button2">Button 2</button>
-            </div>
-        `;
+    private createEdgeTool(){
+
+        const container = ToolsView.createElement('div', false) as HTMLDivElement
+        container.style.position = 'absolute'
+
+        this.edgeToolContainer = container
+        this.container.appendChild(container)
+
+        // h(EdgeTool, {
+        //     visible: true,
+        //     edge: this.cellView.cell,
+        // })
+        createApp(EdgeTool, {
+            visible: true,
+            edge: this.cellView.cell,
+        }).mount(container)
+
+        return container
     }
-    update() {
+
+    public update() {
         this.updatePosition()
         return this
     }
 
-    protected updatePosition() {
-        const matrix = this.getEdgeMatrix()
-        Dom.transform(this.container as SVGElement, matrix, { absolute: true })
-    }
+    private updatePosition() {
+        const view = this.cellView
+        const { x, y, width, height } = view.getBBox();
+        const { offsetX = 0, offsetY = 0 } = this.options;
 
-    protected getEdgeMatrix() {
-        const view = this.cellView as EdgeView
-        const options = this.options
-        const { offset = 0, distance = 0, rotate } = options
+        // 计算工具的位置
+        const toolX = x + width / 2 + offsetX;
+        const toolY = y + height / 2 + offsetY;
 
-        let tangent
-        let position
-        let angle
-
-        const d = NumberExt.normalizePercentage(distance, 1)
-        if (d >= 0 && d <= 1) {
-            tangent = view.getTangentAtRatio(d)
-        } else {
-            tangent = view.getTangentAtLength(d)
+        // 设置工具的位置
+        if (this.edgeToolContainer){
+            this.edgeToolContainer.style.left = `${toolX}px`;
+            this.edgeToolContainer.style.top = `${toolY}px`;
         }
-
-        if (tangent) {
-            position = tangent.start
-            angle = tangent.vector().vectorAngle(new Point(1, 0)) || 0
-        } else {
-            position = view.getConnection()!.start!
-            angle = 0
-        }
-
-        let matrix = Dom.createSVGMatrix()
-            .translate(position.x, position.y)
-            .rotate(angle)
-
-        if (typeof offset === 'object') {
-            matrix = matrix.translate(offset.x || 0, offset.y || 0)
-        } else {
-            matrix = matrix.translate(0, offset)
-        }
-
-        if (!rotate) {
-            matrix = matrix.rotate(-angle)
-        }
-
-        return matrix
-    }
-
-
-    protected onMouseDown(e: Dom.MouseDownEvent) {
-        if (this.guard(e)) {
-            return
-        }
-
-        e.stopPropagation()
-        e.preventDefault()
     }
 }
 
 TooltipTool.config({
     tagName: 'div',
-    useCellGeometry: true,
     isSVGElement: false,
 })
 
 export interface TooltipToolOptions extends ToolsView.ToolItem.Options {
-    x?: number | string
-    y?: number | string
-    distance?: number | string
-    offset?: number | Point.PointLike
-    rotate?: boolean
-    useCellGeometry?: boolean
+    offsetX?: number,
+    offsetY?: number
 }
