@@ -3,7 +3,7 @@ import {register} from "@antv/x6-vue-shape";
 import ERNode from "../components/ERNode.vue";
 import {shapeName} from "../constants/constant.ts"
 import {Attr} from "@antv/x6/es/registry";
-import {TooltipTool} from "../tools/EdgeToolView.ts";
+import {ToolEdgeLabel} from "../tools/EdgeToolView.ts";
 
 /**
  * 注册连接桩布局规则
@@ -182,7 +182,7 @@ const registerEdgeTool = () => {
     //     ],
     //     // 其他配置，可能包括工具行为、事件等
     // }, true);
-    Graph.registerEdgeTool('edge-tool-button', TooltipTool, true)
+    Graph.registerEdgeTool('edge-tool-label', ToolEdgeLabel, true)
 }
 
 export const useGraphRegister = () => {

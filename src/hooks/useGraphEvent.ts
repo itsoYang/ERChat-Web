@@ -121,21 +121,26 @@ const useEdgeConnectedEvent = (graph: Graph) => {
     graph.on('edge:connected', ({ isNew, edge }) => {
         if (isNew){
             // 边标签弹窗
-            // edge.addTools( {
-            //     name: 'edge-tool-button',
-            //     args: {
-            //         distance: '50%',
-            //         offset: -10
-            //     },
-            // })
             edge.addTools( {
-                name: 'edge-tool-button',
+                name: 'edge-tool-label',
                 args: {
-                    offsetX: 10,
-                    offsetY: -50
+                    offsetX: 0,
+                    offsetY: 0,
                 },
             })
         }
+    })
+}
+
+const useEdgeDBClickEvent = (graph: Graph) => {
+    graph.on('edge:dblclick', ({ edge }) => {
+        edge.addTools( {
+            name: 'edge-tool-label',
+            args: {
+                offsetX: 0,
+                offsetY: 0,
+            },
+        })
     })
 }
 
@@ -153,4 +158,6 @@ export const useGraphEvent = () => {
     useNodeMovingEvent(graph)
     // 连线连接事件
     useEdgeConnectedEvent(graph)
+    // 连线双击事件
+    useEdgeDBClickEvent(graph)
 }
