@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import designer from "./views/designer.vue";
-  import AddNode from "./views/AddNode.vue"
+  import Navigator from "./views/navigator.vue";
 </script>
 
 <template>
   <designer/>
-  <AddNode/>
+  <navigator/>
 </template>
 
 <style>
