@@ -1,8 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import NodeEditor from "../components/NodeEditor.vue";
-  import {useGraphStore} from "../stores/graph.ts";
-  import {Graph} from "@antv/x6";
+  import {save} from "../api/designer.ts";
 
   let nodeEditorVisible = ref(false)
   let nodeData = ref({
@@ -20,12 +19,6 @@
 
   const addERNode = () => {
     nodeEditorVisible.value = true
-  }
-
-  const save = () => {
-    const graphStore = useGraphStore();
-    const graph: Graph = graphStore.graph
-    console.log('保存',graph.toJSON());
   }
 </script>
 
