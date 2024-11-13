@@ -4,8 +4,7 @@
 </script>
 
 <template>
-  <designer/>
-  <navigator/>
+  <router-view/>
 </template>
 
 <style>
