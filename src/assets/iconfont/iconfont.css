@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4735929 */
-  src: url('iconfont.woff2?t=1730814387536') format('woff2'),
-       url('iconfont.woff?t=1730814387536') format('woff'),
-       url('iconfont.ttf?t=1730814387536') format('truetype');
+  src: url('iconfont.woff2?t=1731592658051') format('woff2'),
+       url('iconfont.woff?t=1731592658051') format('woff'),
+       url('iconfont.ttf?t=1731592658051') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,42 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jiedian:before {
+  content: "\e60e";
+}
+
+.icon-shoucang:before {
+  content: "\e640";
+}
+
+.icon-shujuku:before {
+  content: "\e625";
+}
+
+.icon-gongju-chuangjianxiangmu:before {
+  content: "\e606";
+}
+
+.icon-shujuyuan:before {
+  content: "\e634";
+}
+
+.icon-mobanku-moren:before {
+  content: "\e60c";
+}
+
+.icon-chuangjianxiangmu:before {
+  content: "\e6e9";
+}
+
+.icon-jiedian1:before {
+  content: "\e709";
+}
+
+.icon-mobanku:before {
+  content: "\e664";
 }
 
 .icon-ego-menu:before {

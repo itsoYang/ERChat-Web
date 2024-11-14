@@ -1,5 +1,10 @@
 <script setup lang="ts">
 
+  import {ref} from "vue";
+
+  const logoUrl = ref('')
+
+
 </script>
 
 <template>
@@ -7,7 +12,7 @@
     <!-- 页面头部区域 -->
     <div class="er-header">
       <div>
-        logo
+        <img style="width: 100px; height: 100px" src="@/assets/logo/trans_bg.png" fit="fill" />
       </div>
       <div>
         搜索区域
@@ -19,8 +24,30 @@
     <!-- 页面主体区域 -->
     <div class="er-main">
       <div class="er-main-left">
-        <div>
-          <el-button type="primary">创建项目</el-button>
+        <div class="er-main-left-menu">
+          <div class="er-menu-item">
+            <span><i class="iconfont">&#xe640;</i></span>
+            <span>我的收藏</span>
+          </div>
+          <div class="er-menu-item">
+            <span><i class="iconfont">&#xe6e9;</i></span>
+            <span>创建项目</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="er-main-left-project">
+          <div class="er-project-item">
+            <div class="er-project-item-title">
+              <div class="er-project-item-title-icon">
+                <i class="iconfont">&#xe6e9;</i>
+              </div>
+              <div class="er-project-item-title-text">
+                <div>项目1</div>
+                <div>项目描述</div>
+              </div>
+            </div>
+            <div class="er-project-item-content"></div>
+          </div>
         </div>
       </div>
       <div class="gap"></div>
@@ -59,18 +86,37 @@
       div{
         flex: 1;
       }
+      div:first-child{
+        background-image: url("@/assets/logo/trans_bg.png");
+      }
     }
     .er-main {
       width: 75vw;
-      margin: 70px auto auto;
+      margin: 90px auto auto;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      //background-color: #24b8a6;
       height: 85vh;
       display: grid;
       grid-template-columns: 1.5fr 0.2fr 3.5fr;
       .er-main-left,.er-main-right {
         border-radius: 5px;
         background-color: #24b8a6;
+      }
+      .er-main-left {
+        display: grid;
+        grid-template-rows: 200px 0.5fr 10fr;
+        padding: 15px;
+        .er-main-left-menu {
+          display: grid;
+          grid-template-rows: 1fr 1fr 5fr;
+          .er-menu-item {
+            margin: 5px 0;
+            display: inline-block;
+            cursor: pointer;
+            span:first-child{
+              margin-right: 5px;
+            }
+          }
+        }
       }
     }
   }

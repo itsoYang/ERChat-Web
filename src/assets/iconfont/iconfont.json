@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5318189",
+      "name": "节点",
+      "font_class": "jiedian",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "6268295",
+      "name": "收藏",
+      "font_class": "shoucang",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "8765123",
+      "name": "数据库",
+      "font_class": "shujuku",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "12085993",
+      "name": "工具-创建项目",
+      "font_class": "gongju-chuangjianxiangmu",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "12550607",
+      "name": "数据源",
+      "font_class": "shujuyuan",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "30269545",
+      "name": "模板库-默认",
+      "font_class": "mobanku-moren",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "37087700",
+      "name": "创建项目",
+      "font_class": "chuangjianxiangmu",
+      "unicode": "e6e9",
+      "unicode_decimal": 59113
+    },
+    {
+      "icon_id": "38964791",
+      "name": "节点",
+      "font_class": "jiedian1",
+      "unicode": "e709",
+      "unicode_decimal": 59145
+    },
+    {
+      "icon_id": "40086146",
+      "name": "模板库",
+      "font_class": "mobanku",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
       "icon_id": "879161",
       "name": "菜单",
       "font_class": "ego-menu",
