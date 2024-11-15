@@ -1,9 +1,20 @@
 <script setup lang="ts">
 
-  import {ref} from "vue";
+  import {createProject} from "../api/project";
+  import Project from "../api/project/type.ts";
 
-  const logoUrl = ref('')
-
+  const saveProject = () => {
+    const project: Project = {
+      id: '1',
+      name: 'test',
+      desc: 'test',
+      status: 1,
+      createUser: 'test',
+      createTime: '2023-06-06',
+      updateTime: '2023-06-06'
+    }
+    createProject(project)
+  }
 
 </script>
 
@@ -30,7 +41,7 @@
             <span><i class="iconfont">&#xe640;</i></span>
             <span>我的收藏</span>
           </div>
-          <div class="er-menu-item">
+          <div class="er-menu-item" @click="saveProject">
             <span><i class="iconfont">&#xe6e9;</i></span>
             <span>创建项目</span>
           </div>
