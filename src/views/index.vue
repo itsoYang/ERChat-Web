@@ -8,11 +8,12 @@
 </script>
 
 <template>
+  <div class="er-bg"></div>
   <div class="er-container">
     <!-- 页面头部区域 -->
     <div class="er-header">
       <div>
-        <img style="width: 100px; height: 100px" src="@/assets/logo/trans_bg.png" fit="fill" />
+        <img style="width: 100px; height: 100px" src="@/assets/logo/trans_bg.png" />
       </div>
       <div>
         搜索区域
@@ -37,16 +38,8 @@
         <div class="divider"></div>
         <div class="er-main-left-project">
           <div class="er-project-item">
-            <div class="er-project-item-title">
-              <div class="er-project-item-title-icon">
-                <i class="iconfont">&#xe6e9;</i>
-              </div>
-              <div class="er-project-item-title-text">
-                <div>项目1</div>
-                <div>项目描述</div>
-              </div>
-            </div>
-            <div class="er-project-item-content"></div>
+            <span><i class="iconfont">&#xe634;</i></span>
+            <span>项目一</span>
           </div>
         </div>
       </div>
@@ -62,10 +55,24 @@
 </template>
 
 <style lang="scss" scoped>
-  .er-container{
+  .er-bg {
     background-image: url('@/assets/images/bg01.png');
+    background-size: cover; /* 确保背景图覆盖整个容器 */
+    background-position: center; /* 背景图居中 */
+    background-attachment: fixed; /* 固定背景图，使其随着页面滚动 */
+    background-repeat: no-repeat; /* 防止背景图重复 */
+    overflow: auto; /* 确保容器可以滚动 */
+
+    position: fixed;
+    width: 100vw;
     height: 100vh;
-    background-color: #f7f7fb;
+    filter: blur(6px);
+    z-index: 1;
+  }
+  .er-container{
+    position: relative;
+    z-index: 2;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     .er-header {
@@ -74,7 +81,7 @@
       transform: translateX(-50%);
       width: 75vw;
       height: 60px;
-      background-color: #8f8fa2;
+      background-color: rgba(255, 255, 255, 0.7); /* 半透明背景 */
       border-radius: 5px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
@@ -99,11 +106,12 @@
       grid-template-columns: 1.5fr 0.2fr 3.5fr;
       .er-main-left,.er-main-right {
         border-radius: 5px;
-        background-color: #24b8a6;
+        //background-color: #24b8a6;
+        background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
       }
       .er-main-left {
         display: grid;
-        grid-template-rows: 200px 0.5fr 10fr;
+        grid-template-rows: 200px 0fr 10fr;
         padding: 15px;
         .er-main-left-menu {
           display: grid;
@@ -117,7 +125,23 @@
             }
           }
         }
+        .divider {
+          height: 1px;
+          border: 1px solid #ccc;
+        }
+        .er-main-left-project {
+          .er-project-item {
+            margin: 5px 0;
+            display: inline-block;
+            cursor: pointer;
+            span:first-child{
+              margin-right: 5px;
+            }
+          }
+        }
       }
     }
   }
+
+
 </style>
