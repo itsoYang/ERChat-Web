@@ -1,7 +1,7 @@
 import {useGraphStore} from "../stores/graph.ts";
 import {Graph} from "@antv/x6";
 import axios from "../utils/axios.ts";
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuIdv4} from 'uuid';
 
 interface ERDiagram {
     id: string
@@ -53,7 +53,7 @@ const save = async () => {
 
     console.log('保存前',cells, 'ss', JSON.stringify(cells));
 
-    const diagramId = uuidv4()
+    const diagramId = uuIdv4()
     const diagram: ERDiagram = {
         id: diagramId,
         diagramName: 'test_'+diagramId,

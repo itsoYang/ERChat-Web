@@ -1,9 +1,19 @@
 import Project from "./type.ts";
 import axios from "../../utils/axios.ts";
+import {v4 as uuIdv4} from 'uuid';
 
 
 // 创建项目
-const createProject = async (project: Project) => {
+const createProject = async (name: string, desc: string, status: number) => {
+    const project: Project = {
+        id: uuIdv4(),
+        name,
+        desc,
+        status,
+        createUser: 'test',
+        createTime: '2023-06-06',
+        updateTime: '2023-06-06'
+    }
     await axios.post('/project/save', project)
 }
 

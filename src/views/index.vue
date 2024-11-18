@@ -1,20 +1,15 @@
 <script setup lang="ts">
 
-  import {createProject} from "../api/project";
-  import Project from "../api/project/type.ts";
+  import {ref} from "vue";
+  import ProjectInfo from "../components/ProjectInfo.vue";
 
-  const saveProject = () => {
-    const project: Project = {
-      id: '1',
-      name: 'test',
-      desc: 'test',
-      status: 1,
-      createUser: 'test',
-      createTime: '2023-06-06',
-      updateTime: '2023-06-06'
-    }
-    createProject(project)
+
+  const visible = ref(false)
+
+  const openProjectInfo = () => {
+    visible.value = true
   }
+
 
 </script>
 
@@ -41,7 +36,7 @@
             <span><i class="iconfont">&#xe640;</i></span>
             <span>我的收藏</span>
           </div>
-          <div class="er-menu-item" @click="saveProject">
+          <div class="er-menu-item" @click="openProjectInfo">
             <span><i class="iconfont">&#xe6e9;</i></span>
             <span>创建项目</span>
           </div>
@@ -63,6 +58,7 @@
       </div>
     </div>
   </div>
+  <ProjectInfo v-model:visible="visible" @close="visible = false"/>
 </template>
 
 <style lang="scss" scoped>
