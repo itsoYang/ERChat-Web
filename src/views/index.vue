@@ -4,6 +4,7 @@
   import ProjectInfo from "../components/ProjectInfo.vue";
   import {getProjectList} from "../api/project";
   import Project from "../api/project/type.ts";
+  import DiagramCard from "../components/DiagramCard.vue";
 
 
   const visible = ref(false)
@@ -66,8 +67,23 @@
       <div class="gap"></div>
       <div class="er-main-right">
         <!-- 右侧列表 -->
-        <div class="er-main-right-header"></div>
+        <div class="er-main-right-header">
+          <div>
+            <span class="er-title">项目列表</span>
+          </div>
+          <div class="gap"></div>
+          <div>
+            <el-button type="primary" @click="openProjectInfo">新建ER图</el-button>
+          </div>
+        </div>
         <div class="er-main-right-content">
+          <div class="diagram-card-container">
+            <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
+            <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
+            <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
+            <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
+            <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
+          </div>
         </div>
       </div>
     </div>
@@ -138,12 +154,16 @@
           display: grid;
           grid-template-rows: 1fr 1fr 5fr;
           .er-menu-item {
-            margin: 5px 0;
+            border-radius: 5px;
+            padding: 5px 0;
             display: inline-block;
             cursor: pointer;
             span:first-child{
               margin-right: 5px;
             }
+          }
+          .er-menu-item:hover{
+            background-color: #e6e6e6;
           }
         }
         .divider {
@@ -166,6 +186,29 @@
           .er-project-item:hover{
             background-color: #e6e6e6;
           }
+        }
+      }
+      .er-main-right {
+        display: flex;
+        flex-direction: column;
+        height: 85vh;
+        .er-main-right-header {
+          height: 75px;
+          width: 100%;
+          display: grid;
+          grid-template-columns: 2fr 5fr 2fr;
+          justify-content: space-between;
+          align-items: center;
+          div:first-child{
+            margin: auto;
+            font-size: 20px;
+          }
+          div:last-child{
+            margin: auto;
+          }
+        }
+        .er-main-right-content {
+          height: calc(85vh - 75px);
         }
       }
     }
