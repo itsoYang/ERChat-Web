@@ -4,23 +4,22 @@ import {v4 as uuIdv4} from 'uuid';
 
 
 // 创建项目
-const createProject = async (name: string, desc: string, status: number) => {
+const createProject = async (projectName: string, projectDesc: string) => {
     const project: Project = {
         id: uuIdv4(),
-        name,
-        desc,
-        status,
-        createUser: 'test',
-        createTime: '2023-06-06',
-        updateTime: '2023-06-06'
+        projectName,
+        projectDesc
     }
-    await axios.post('/project/save', project)
+    try {
+        return await axios.post('/project/save', project)
+    } catch (e) {
+        console.log('请求错误信息：',JSON.stringify(e))
+    }
 }
 
 // 获取项目列表
 const getProjectList = async () => {
-    const res = await axios.get('/project/list')
-    return res.data
+    return await axios.get('/project/list')
 }
 
 // 删除项目

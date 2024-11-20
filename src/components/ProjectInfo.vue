@@ -1,50 +1,91 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import {reactive, ref, getCurrentInstance} from 'vue'
+  import type { FormInstance, FormRules } from 'element-plus'
+  import {createProject} from "../api/project";
 
-  const props = defineProps(["visible"])
+  const {proxy} = getCurrentInstance() as any
+
+  const projectInfoFormRef = ref<FormInstance>()
+
+  const props = defineProps(["visible", "title"])
   const emit = defineEmits(['close'])
 
   const projectInfo = ref({
     name: "",
-    desc: "",
-    visibility: ''
+    desc: ""
   })
 
-  const confirm = () => {
-    emit('close')
+  const confirm = (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    formEl.validate( async (valid) => {
+      if (valid) {
+        const {success, message} = await createProject(projectInfo.value.name, projectInfo.value.desc)
+        if (success){
+          emit('close')
+          proxy.$message(
+              {
+                message: message,
+                type: 'success'
+              }
+          )
+        }
+      }
+    })
   }
 
-  const cancel = () => {
+  const closeDlg = () => {
     emit('close')
     projectInfo.value = {
       name: "",
-      desc: "",
-      visibility: ''
+      desc: ""
     }
   }
+
+  const checkProjectName = (rule: any, value: any, callback: any) => {
+    if (!value) {
+      return callback(new Error('输入项目名称'))
+    }
+    callback()
+  }
+
+  const rules = reactive<FormRules<typeof ruleForm>>({
+    name: [{ validator: checkProjectName, trigger: 'blur' }]
+  })
 
 </script>
 
 <template>
   <div class="project-info">
-    <el-dialog v-model="props.visible" title="项目信息" width="500">
-      <el-form :model="projectInfo">
-        <el-form-item label="Promotion name">
+    <el-dialog
+        v-model="props.visible"
+        width="500"
+        @close="closeDlg"
+    >
+      <template #header>
+        <div style="border-bottom: 1px solid #dcdfe6; padding-bottom: 15px;">{{ props.title }}</div>
+      </template>
+      <el-form
+          ref="projectInfoFormRef"
+          :model="projectInfo"
+          :rules="rules"
+          status-icon
+          label-position="top"
+      >
+        <el-form-item label="项目名称" prop="name">
           <el-input v-model="projectInfo.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="Zones">
-          <el-select v-model="projectInfo.visibility" placeholder="Please select a zone">
-            <el-option label="Zone No.1" value="shanghai" />
-            <el-option label="Zone No.2" value="beijing" />
-          </el-select>
+        <el-form-item label="项目描述">
+          <el-input
+              v-model="projectInfo.desc"
+              :rows="4"
+              type="textarea"
+              placeholder="请输入项目描述信息"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="cancel">Cancel</el-button>
-          <el-button type="primary" @click="confirm">
-            Confirm
-          </el-button>
+          <el-button type="primary" @click="confirm(projectInfoFormRef)">确认</el-button>
         </div>
       </template>
     </el-dialog>

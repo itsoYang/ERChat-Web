@@ -1,14 +1,28 @@
 <script setup lang="ts">
 
-  import {ref} from "vue";
+  import {onMounted, ref} from "vue";
   import ProjectInfo from "../components/ProjectInfo.vue";
+  import {getProjectList} from "../api/project";
+  import Project from "../api/project/type.ts";
 
 
   const visible = ref(false)
+  const title = ref('新建项目')
+
+  const projectList = ref<Project[]>([])
 
   const openProjectInfo = () => {
     visible.value = true
   }
+
+  onMounted(async () => {
+    const {success, data} = await getProjectList()
+    if (success){
+      console.log('项目列表',data)
+      projectList.value = data
+      console.log(projectList.value)
+    }
+  })
 
 
 </script>
@@ -43,9 +57,9 @@
         </div>
         <div class="divider"></div>
         <div class="er-main-left-project">
-          <div class="er-project-item">
+          <div class="er-project-item" v-for="project in projectList" :key="project.id">
             <span><i class="iconfont">&#xe634;</i></span>
-            <span>项目一</span>
+            <span>{{ project.projectName }}</span>
           </div>
         </div>
       </div>
@@ -58,7 +72,7 @@
       </div>
     </div>
   </div>
-  <ProjectInfo v-model:visible="visible" @close="visible = false"/>
+  <ProjectInfo v-model:visible="visible" @close="visible = false" :title="title"/>
 </template>
 
 <style lang="scss" scoped>
@@ -135,15 +149,22 @@
         .divider {
           height: 1px;
           border: 1px solid #ccc;
+          margin: 15px 0;
         }
         .er-main-left-project {
+          display: flex;
+          flex-direction: column;
           .er-project-item {
-            margin: 5px 0;
+            border-radius: 5px;
+            padding: 5px 0;
             display: inline-block;
             cursor: pointer;
             span:first-child{
               margin-right: 5px;
             }
+          }
+          .er-project-item:hover{
+            background-color: #e6e6e6;
           }
         }
       }
