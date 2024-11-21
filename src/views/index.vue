@@ -5,6 +5,8 @@
   import {getProjectList} from "../api/project";
   import Project from "../api/project/type.ts";
   import DiagramCard from "../components/DiagramCard.vue";
+  import IndexHeader from "../components/IndexHeader.vue";
+  import bgImg from "../assets/images/bg01.png";
 
 
   const visible = ref(false)
@@ -29,20 +31,10 @@
 </script>
 
 <template>
-  <div class="er-bg"></div>
+  <el-image :src="bgImg" style="width: 100%;height: 100%;"  fit="fill"></el-image>
   <div class="er-container">
     <!-- 页面头部区域 -->
-    <div class="er-header">
-      <div>
-        <img style="width: 100px; height: 100px" src="@/assets/logo/trans_bg.png" />
-      </div>
-      <div>
-        搜索区域
-      </div>
-      <div>
-        个人信息
-      </div>
-    </div>
+    <index-header></index-header>
     <!-- 页面主体区域 -->
     <div class="er-main">
       <div class="er-main-left">
@@ -92,17 +84,17 @@
 </template>
 
 <style lang="scss" scoped>
-  .er-bg {
-    background-image: url('@/assets/images/bg01.png');
+  .el-image {
+    //background-image: url('@/assets/images/bg01.png');
     background-size: cover; /* 确保背景图覆盖整个容器 */
     background-position: center; /* 背景图居中 */
     background-attachment: fixed; /* 固定背景图，使其随着页面滚动 */
     background-repeat: no-repeat; /* 防止背景图重复 */
     overflow: auto; /* 确保容器可以滚动 */
-
-    position: fixed;
     width: 100vw;
     height: 100vh;
+
+    position: fixed;
     filter: blur(6px);
     z-index: 1;
   }
@@ -136,7 +128,7 @@
     }
     .er-main {
       width: 75vw;
-      margin: 90px auto auto;
+      margin: 30px auto auto;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       height: 85vh;
       display: grid;
@@ -192,6 +184,7 @@
         display: flex;
         flex-direction: column;
         height: 85vh;
+        overflow: auto;
         .er-main-right-header {
           height: 75px;
           width: 100%;
@@ -209,6 +202,10 @@
         }
         .er-main-right-content {
           height: calc(85vh - 75px);
+          .diagram-card-container {
+            display: flex;
+            flex-wrap: wrap;
+          }
         }
       }
     }
