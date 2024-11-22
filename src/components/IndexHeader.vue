@@ -28,6 +28,7 @@
           placeholder="搜索..."
           class="search-input"
           :suffix-icon="Search"
+          @keyup.enter="search"
       />
     </div>
     <div class="avatar-container">
@@ -43,8 +44,6 @@
     justify-content: space-between;
     padding: 10px 20px;
     height: 75px;
-    .logo-container {
-    }
 
     .header-center {
       flex-grow: 1; /* 中间区域占据剩余空间 */
@@ -59,6 +58,9 @@
       .search-input:focus {
         border-color: #409eff; /* 聚焦时边框颜色 */
       }
+    }
+    .avatar-container {
+      cursor: pointer;
     }
   }
 </style>
