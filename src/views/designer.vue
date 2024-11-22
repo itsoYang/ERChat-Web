@@ -7,9 +7,12 @@
   import { useGraphEvent } from "../hooks/useGraphEvent.ts";
   import { useAddNode, useCalcNodeHeight } from "../hooks/useGraphNode.ts";
   import { INodeData } from "../types/graphTypes.ts";
+  import {useRoute} from "vue-router";
 
   // 注册相关
   useGraphRegister()
+
+  const route = useRoute();
 
   const TeleportContainer = getTeleport()
 
@@ -68,6 +71,8 @@
 
     // 事件监听相关
     useGraphEvent()
+
+    console.log('项目id', route.query.id)
   })
 
 

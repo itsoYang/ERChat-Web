@@ -12,10 +12,19 @@
   const visible = ref(false)
   const title = ref('新建项目')
 
+  // TODO test为测试用 待删除
+  const projectId = ref('test')
+
   const projectList = ref<Project[]>([])
 
   const openProjectInfo = () => {
     visible.value = true
+  }
+
+  // 新建ER图
+  const createERDiagram = () => {
+    // TODO 传递 projectId
+    window.open(`/designer?id=${projectId.value}`, '_blank')
   }
 
   onMounted(async () => {
@@ -50,7 +59,7 @@
         </div>
         <div class="divider"></div>
         <div class="er-main-left-project">
-          <div class="er-project-item" v-for="project in projectList" :key="project.id">
+          <div class="er-project-item" v-for="project in projectList" :key="project.id" @click="projectId = project.id">
             <span><i class="iconfont">&#xe634;</i></span>
             <span>{{ project.projectName }}</span>
           </div>
@@ -65,7 +74,7 @@
           </div>
           <div class="gap"></div>
           <div>
-            <el-button type="primary" @click="openProjectInfo">新建ER图</el-button>
+            <el-button type="primary" @click="createERDiagram">新建ER图</el-button>
           </div>
         </div>
         <div class="er-main-right-content">
