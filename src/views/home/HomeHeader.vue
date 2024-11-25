@@ -32,7 +32,7 @@
       />
     </div>
     <div class="avatar-container">
-      <el-avatar :src="avatarUrl" size="large"></el-avatar>
+      <el-avatar :src="avatarUrl" size="simall"></el-avatar>
     </div>
   </header>
 </template>
@@ -50,12 +50,15 @@
     .header-center {
       flex-grow: 1; /* 中间区域占据剩余空间 */
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
       .search-input {
-        width: 300px; /* 根据需要设置搜索框宽度 */
+        width: 100px; /* 根据需要设置搜索框宽度 */
         padding: 8px;
         border-radius: 4px;
         outline: none;
+        :deep(.el-input__wrapper) {
+          background-color: #efefef;
+        }
       }
       .search-input:focus {
         border-color: #409eff; /* 聚焦时边框颜色 */

@@ -88,7 +88,7 @@ onMounted(async () => {
 .er-container{
   position: relative;
   z-index: 2;
-  height: 100vh;
+  //height: 100vh;
   display: flex;
   flex-direction: column;
   .er-main {
