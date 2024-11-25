@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  import NodeEditor from "../components/NodeEditor.vue";
-  import {save} from "../api/designer.ts";
+  import NodeEditor from "../../components/NodeEditor.vue";
+  import {save} from "../../api/designer.ts";
 
   let nodeEditorVisible = ref(false)
   let nodeData = ref({

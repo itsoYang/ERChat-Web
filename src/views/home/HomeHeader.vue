@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
   import {ref} from "vue";
-  import logoUrl from '../assets/logo/trans_bg.png'
-  import avatarUrl from '../assets/images/dog.png'
+  import logoUrl from '../../assets/logo/trans_bg.png'
+  import avatarUrl from '../../assets/images/dog.png'
   import {Search} from "@element-plus/icons-vue";
 
   const searchQuery = ref('')
@@ -39,6 +39,8 @@
 
 <style scoped lang="scss">
   .header {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;

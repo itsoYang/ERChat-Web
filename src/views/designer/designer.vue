@@ -2,11 +2,11 @@
   import { onMounted } from "vue";
   import { Graph, Shape } from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
-  import { useGraphRegister } from "../hooks/useGraphRegister.ts";
-  import { useGraphStore } from "../stores/graph.ts";
-  import { useGraphEvent } from "../hooks/useGraphEvent.ts";
-  import { useAddNode, useCalcNodeHeight } from "../hooks/useGraphNode.ts";
-  import { INodeData } from "../types/graphTypes.ts";
+  import { useGraphRegister } from "../../hooks/useGraphRegister.ts";
+  import { useGraphStore } from "../../stores/graph.ts";
+  import { useGraphEvent } from "../../hooks/useGraphEvent.ts";
+  import { useAddNode, useCalcNodeHeight } from "../../hooks/useGraphNode.ts";
+  import { INodeData } from "../../types/graphTypes.ts";
   import {useRoute} from "vue-router";
 
   // 注册相关
