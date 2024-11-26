@@ -1,29 +1,56 @@
 <script setup lang="ts">
 
-import DiagramCard from "../../components/DiagramCard.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, Ref, ref} from "vue";
 import Project from "../../api/home/type.ts";
 import {getProjectList} from "../../api/home/project.ts";
-import ProjectInfo from "../../components/ProjectInfo.vue";
 import NoProject from "../../assets/images/NoProject.svg";
+import {menus} from "../../api/home/home.ts";
+import MainRight from "./MainRight.vue";
+import ProjectInfo from "../../components/ProjectInfo.vue";
 
 const visible = ref(false)
 const title = ref('新建项目')
 
+// 当前选择的菜单按钮索引
+const selectedMenu: Ref<number> = ref(0)
+
+// 当前选择的项目索引
+const selectedItem = ref(null);
+
+
+const projectList = ref<Project[]>([])
+const collectionDiagrams = ref([])
+
 // TODO test为测试用 待删除
 const projectId = ref('test')
 
-const projectList = ref<Project[]>([])
+const menuClick = (menu: any, index: number) => {
+  selectedMenu.value = index
+  if (menu.key !== 'create_project'){
+  }
+  switch (menu.key) {
+    case 'new':
+      break;
+    case 'create_project':
+      openProjectInfo()
+      break;
+    case 'update':
+      break;
+    default:
+      break;
+  }
+}
 
 const openProjectInfo = () => {
   visible.value = true
 }
 
-// 新建ER图
-const createERDiagram = () => {
-  // TODO 传递 projectId
-  window.open(`/designer?id=${projectId.value}`, '_blank')
-}
+// 默认点击 第一个菜单
+const currentClickItem = ref({
+  type: 'menu',
+  label: menus[0].label,
+  id: menus[0].key
+})
 
 onMounted(async () => {
   const {success, data} = await getProjectList()
@@ -39,13 +66,14 @@ onMounted(async () => {
   <div class="er-main">
     <div class="er-main-left">
       <div class="er-main-left-menu">
-        <div class="er-menu-item">
-          <span><i class="iconfont">&#xe640;</i></span>
-          <span>我的收藏</span>
-        </div>
-        <div class="er-menu-item" @click="openProjectInfo">
-          <span><i class="iconfont">&#xe6e9;</i></span>
-          <span>创建项目</span>
+        <div class="er-menu-item"
+             :style="{ backgroundColor: selectedMenu === index ? 'lightblue' : '' }"
+             v-for="(menu, index) in menus"
+             :key="menu.key"
+             @click="menuClick(menu, index)"
+        >
+          <span><i class="iconfont" v-html="menu.icon"></i></span>
+          <span>{{ menu.label }}</span>
         </div>
       </div>
       <div class="divider"></div>
@@ -58,27 +86,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="gap"></div>
-    <div class="er-main-right">
-      <!-- 右侧列表 -->
-      <div class="er-main-right-header">
-        <div>
-          <span class="er-title">项目列表</span>
-        </div>
-        <div class="gap"></div>
-        <div>
-          <el-button type="primary" @click="createERDiagram">新建ER图</el-button>
-        </div>
-      </div>
-      <div class="er-main-right-content">
-        <div class="diagram-card-container">
-          <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-          <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-          <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-          <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-          <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-        </div>
-      </div>
-    </div>
+    <main-right :curClickItem="currentClickItem"></main-right>
   </div>
   <ProjectInfo v-model:visible="visible" @close="visible = false" :title="title"/>
 </template>
@@ -140,33 +148,6 @@ onMounted(async () => {
       }
     }
   }
-  .er-main-right {
-    display: flex;
-    flex-direction: column;
-    height: 85vh;
-    overflow: auto;
-    .er-main-right-header {
-      height: 75px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 2fr 5fr 2fr;
-      justify-content: space-between;
-      align-items: center;
-      div:first-child{
-        margin: auto;
-        font-size: 20px;
-      }
-      div:last-child{
-        margin: auto;
-      }
-    }
-    .er-main-right-content {
-      height: calc(85vh - 75px);
-      .diagram-card-container {
-        display: flex;
-        flex-wrap: wrap;
-      }
-    }
-  }
+
 }
 </style>
