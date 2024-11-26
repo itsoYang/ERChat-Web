@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import HomeHeader from "./HomeHeader.vue";
-  import bgImg from "../../assets/images/bg01.png";
+  import bgImg from "../../assets/images/bg02.jpg";
   import HomeMain from "./HomeMain.vue";
 
 </script>

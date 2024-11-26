@@ -19,7 +19,21 @@ const createProject = async (projectName: string, projectDesc: string) => {
 
 // 获取项目列表
 const getProjectList = async () => {
-    return await axios.get('/project/list')
+    try {
+        return await axios.get('/project/list')
+    } catch (e) {
+        // TODO 模拟数据 待删除
+        let data = []
+        for (let i = 0; i < 5; i++) {
+            data.push({
+                id: uuIdv4(),
+                projectDesc: '测试项目00' + (i + 1),
+                projectName: '测试项目00' + (i + 1)
+            })
+        }
+        let success = true
+        return {success, data}
+    }
 }
 
 // 删除项目
