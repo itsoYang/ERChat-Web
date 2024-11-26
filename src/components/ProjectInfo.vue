@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import {reactive, ref, getCurrentInstance} from 'vue'
   import type { FormInstance, FormRules } from 'element-plus'
-  import {createProject} from "../api/project";
+  import {createProject} from "../api/home/project.ts";
 
   const {proxy} = getCurrentInstance() as any
 

@@ -2,8 +2,8 @@
 
 import DiagramCard from "../../components/DiagramCard.vue";
 import {onMounted, ref} from "vue";
-import Project from "../../api/project/type.ts";
-import {getProjectList} from "../../api/project";
+import Project from "../../api/home/type.ts";
+import {getProjectList} from "../../api/home/project.ts";
 import ProjectInfo from "../../components/ProjectInfo.vue";
 import NoProject from "../../assets/images/NoProject.svg";
 

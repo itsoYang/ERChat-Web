@@ -1,6 +1,6 @@
-import {useGraphStore} from "../stores/graph.ts";
+import {useGraphStore} from "../../stores/graph.ts";
 import {Graph} from "@antv/x6";
-import axios from "../utils/axios.ts";
+import axios from "../../utils/axios.ts";
 import {v4 as uuIdv4} from 'uuid';
 
 interface ERDiagram {

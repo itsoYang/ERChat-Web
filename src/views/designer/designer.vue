@@ -8,6 +8,7 @@
   import { useAddNode, useCalcNodeHeight } from "../../hooks/useGraphNode.ts";
   import { INodeData } from "../../types/graphTypes.ts";
   import {useRoute} from "vue-router";
+  import Navigator from "./navigator.vue";
 
   // 注册相关
   useGraphRegister()
@@ -53,32 +54,15 @@
     const graphStore = useGraphStore()
     graphStore.setGraph(graph)
 
-    // TODO 测试 待删除
-    let nodeData: INodeData = {
-      id: '001',
-      tableName: 'Users',
-      tableComment: '用户表',
-      fields: [
-        { name: 'id', type: 'int' , comment: '用户id'},
-        { name: 'username', type: 'varchar' , comment: '用户名'},
-        { name: 'email', type: 'varchar' , comment: '用户邮箱'},
-        { name: 'address', type: 'varchar' , comment: '用户地址'},
-      ]
-    }
-    let nodeHeight = useCalcNodeHeight(nodeData.fields);
-    useAddNode({x: 100, y: 100}, nodeHeight, nodeData)
-    useAddNode({x: 500, y: 300}, nodeHeight, nodeData)
-
     // 事件监听相关
     useGraphEvent()
-
-    console.log('项目id', route.query.id)
   })
 
 
 </script>
 
 <template>
+  <navigator></navigator>
   <div id="container" class="x6-graph-container"></div>
   <TeleportContainer />
 </template>
