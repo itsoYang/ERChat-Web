@@ -1,14 +1,15 @@
 <script setup lang="ts">
 
 import DiagramCard from "../../components/DiagramCard.vue";
-import {onMounted, ref, watch} from "vue";
-
+import { Ref, ref, watch } from "vue";
+import {loadDiagramsByProjectId, loadMyFavorites} from "../../api/home/home.ts";
+import NoDiagram from "../../assets/images/NoProject.svg"
 
 const props = defineProps(['curClickItem', 'projectId'])
 
-
 const mainRightTitle = ref('')
-
+const projectId: Ref<string | null> = ref(null)
+const diagrams: Ref<any[] | null> = ref(null)
 
 // 新建ER图
 const createERDiagram = () => {
@@ -19,14 +20,26 @@ const createERDiagram = () => {
 
 watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
   console.log('main right watch execute..', props.curClickItem)
+  projectId.value = null
   if (newVal){
     mainRightTitle.value = props.curClickItem.label
     if (props.curClickItem.type === 'menu'){
       if (props.curClickItem.key === 'my_favorites'){
-        console.log('查询favorites')
+        const {data} = loadMyFavorites()
+        if (!data){
+          let _data = []
+          for (let i = 0; i < 5; i++) {
+            let obj = {title: `00${i + 1}`, content: `diagrams: ${i+1}`}
+            _data.push(obj)
+          }
+          diagrams.value = _data
+        }
       }
     }else if (props.curClickItem.type === 'project'){
       console.log('查询项目下的 diagrams')
+      projectId.value = props.curClickItem.key
+      const { data } = loadDiagramsByProjectId(projectId.value)
+      diagrams.value = data
     }
   }
 }, {immediate: true})
@@ -42,16 +55,24 @@ watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
       </div>
       <div class="gap"></div>
       <div>
-        <el-button type="primary" @click="createERDiagram">新建ER图</el-button>
+        <el-button v-if="projectId" type="primary" @click="createERDiagram">新建ER图</el-button>
       </div>
     </div>
     <div class="er-main-right-content">
       <div class="diagram-card-container">
-        <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-        <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-        <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-        <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
-        <diagram-card title="sss" content="哈哈哈哈"></diagram-card>
+        <diagram-card
+            v-if="diagrams"
+            v-for="diagram in diagrams"
+            :title="diagram.title"
+            :content="diagram.content"
+            :key="diagram.title"
+        >
+        </diagram-card>
+        <el-empty
+            v-else
+            :image="NoDiagram"
+            description="暂无数据"
+        ></el-empty>
       </div>
     </div>
   </div>

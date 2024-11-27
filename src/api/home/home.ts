@@ -1,3 +1,5 @@
+import axios from "../../utils/axios.ts";
+
 /**
  * 主页左侧列表项（包含菜单列表、项目列表）
  */
@@ -8,7 +10,9 @@ export interface IHomeMainLeftItem {
     icon?: string
 }
 
-
+/**
+ * 菜单列表
+ */
 export const menus: IHomeMainLeftItem[] = [
     {
         type: 'menu',
@@ -23,3 +27,28 @@ export const menus: IHomeMainLeftItem[] = [
         icon: '&#xe6e9;'
     }
 ]
+
+/**
+ * 我的收藏列表
+ */
+export const loadMyFavorites = async () => {
+    // TODO 模拟用户ID数据 待删除
+    const userId = 'sssss'
+    try {
+        return await axios.get(`/diagrams/favorites/${userId}`)
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const loadDiagramsByProjectId = (projectId: string | null) => {
+    if (!projectId){
+        return null
+    }
+    try {
+        return axios.get(`/diagrams/${projectId}`)
+    } catch (e) {
+        const data = null
+        return Promise.resolve({data})
+    }
+}
