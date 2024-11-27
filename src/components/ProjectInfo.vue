@@ -21,20 +21,18 @@
       if (valid) {
         const {success, message} = await createProject(projectInfo.value.name, projectInfo.value.desc)
         if (success){
-          emit('close')
-          proxy.$message(
-              {
-                message: message,
-                type: 'success'
-              }
-          )
+          emit('close', true)
+          proxy.$message({
+            message: message,
+            type: 'success'
+          })
         }
       }
     })
   }
 
   const closeDlg = () => {
-    emit('close')
+    emit('close', false)
     projectInfo.value = {
       name: "",
       desc: ""

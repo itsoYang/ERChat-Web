@@ -3,7 +3,8 @@
 import DiagramCard from "../../components/DiagramCard.vue";
 import { Ref, ref, watch } from "vue";
 import {loadDiagramsByProjectId, loadMyFavorites} from "../../api/home/home.ts";
-import NoDiagram from "../../assets/images/NoProject.svg"
+import NoDiagram from "../../assets/images/NoDiagram.svg"
+import EREmpty from "../../components/EREmpty.vue";
 
 const props = defineProps(['curClickItem', 'projectId'])
 
@@ -59,21 +60,23 @@ watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
       </div>
     </div>
     <div class="er-main-right-content">
-      <div class="diagram-card-container">
+      <div
+          class="diagram-card-container"
+          v-if="diagrams"
+      >
         <diagram-card
-            v-if="diagrams"
             v-for="diagram in diagrams"
             :title="diagram.title"
             :content="diagram.content"
             :key="diagram.title"
         >
         </diagram-card>
-        <el-empty
-            v-else
-            :image="NoDiagram"
-            description="暂无数据"
-        ></el-empty>
       </div>
+      <EREmpty
+          v-else
+          :image="NoDiagram"
+          desc="暂无数据"
+      ></EREmpty>
     </div>
   </div>
 </template>

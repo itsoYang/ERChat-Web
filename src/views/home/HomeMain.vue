@@ -54,18 +54,24 @@ const projectClick = (project: Project, index: number) => {
 const openProjectInfo = () => {
   visible.value = true
 }
-const closeProjectInfo = () => {
+const closeProjectInfo = (isConfirm: boolean) => {
+  if (isConfirm){
+    loadProjectList()
+  }
   visible.value = false
   selectedMenu.value = null
 }
 
-onMounted(async () => {
+const loadProjectList = async () => {
   const {success, data} = await getProjectList()
   if (success){
-    console.log('项目列表',data)
     projectList.value = data as Project[]
     console.log(projectList.value)
   }
+}
+
+onMounted( () => {
+  loadProjectList()
 })
 </script>
 
