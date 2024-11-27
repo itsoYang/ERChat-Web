@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import DiagramCard from "../../components/DiagramCard.vue";
-import ProjectInfo from "../../components/ProjectInfo.vue";
 import {onMounted, ref, watch} from "vue";
 
 
@@ -18,15 +17,17 @@ const createERDiagram = () => {
 }
 
 
-watch(props.curClickItem, (newVal: any, oldVal: any) => {
+watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
   console.log('main right watch execute..', props.curClickItem)
-  mainRightTitle.value = props.curClickItem.label
-  if (props.curClickItem.type === 'menu'){
-    if (props.curClickItem.id === 'my_favorites'){
-      console.log('查询favorites')
+  if (newVal){
+    mainRightTitle.value = props.curClickItem.label
+    if (props.curClickItem.type === 'menu'){
+      if (props.curClickItem.key === 'my_favorites'){
+        console.log('查询favorites')
+      }
+    }else if (props.curClickItem.type === 'project'){
+      console.log('查询项目下的 diagrams')
     }
-  }else if (props.curClickItem.id === 'my_projects'){
-    console.log('查询项目下的 diagrams')
   }
 }, {immediate: true})
 

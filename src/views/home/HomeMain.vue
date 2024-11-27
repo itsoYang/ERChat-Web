@@ -4,53 +4,60 @@ import {onMounted, Ref, ref} from "vue";
 import Project from "../../api/home/type.ts";
 import {getProjectList} from "../../api/home/project.ts";
 import NoProject from "../../assets/images/NoProject.svg";
-import {menus} from "../../api/home/home.ts";
+import {IHomeMainLeftItem, menus} from "../../api/home/home.ts";
 import MainRight from "./MainRight.vue";
 import ProjectInfo from "../../components/ProjectInfo.vue";
 
 const visible = ref(false)
 const title = ref('新建项目')
+// 默认点击 第一个菜单
+const currentClickItem: Ref<IHomeMainLeftItem | null> = ref({
+  type: 'menu',
+  label: menus[0].label,
+  key: menus[0].key
+})
 
 // 当前选择的菜单按钮索引
-const selectedMenu: Ref<number> = ref(0)
+const selectedMenu: Ref<number | null> = ref(0)
 
 // 当前选择的项目索引
-const selectedItem = ref(null);
+const selectedProject: Ref<number | null> = ref(null);
 
 
 const projectList = ref<Project[]>([])
-const collectionDiagrams = ref([])
-
-// TODO test为测试用 待删除
-const projectId = ref('test')
 
 const menuClick = (menu: any, index: number) => {
   selectedMenu.value = index
-  if (menu.key !== 'create_project'){
+  selectedProject.value = null
+  if (menu.key === 'my_favorites'){
+    currentClickItem.value = {
+      type: 'menu',
+      label: menu.label,
+      key: menu.key
+    }
+  }else if (menu.key === 'create_project'){
+    currentClickItem.value = null // 右侧刷新
+    openProjectInfo()
   }
-  switch (menu.key) {
-    case 'new':
-      break;
-    case 'create_project':
-      openProjectInfo()
-      break;
-    case 'update':
-      break;
-    default:
-      break;
+}
+
+const projectClick = (project: Project, index: number) => {
+  selectedProject.value = index
+  selectedMenu.value = null
+  currentClickItem.value = {
+    type: 'project',
+    label: project.projectName,
+    key: project.id
   }
 }
 
 const openProjectInfo = () => {
   visible.value = true
 }
-
-// 默认点击 第一个菜单
-const currentClickItem = ref({
-  type: 'menu',
-  label: menus[0].label,
-  id: menus[0].key
-})
+const closeProjectInfo = () => {
+  visible.value = false
+  selectedMenu.value = null
+}
 
 onMounted(async () => {
   const {success, data} = await getProjectList()
@@ -78,7 +85,13 @@ onMounted(async () => {
       </div>
       <div class="divider"></div>
       <div class="er-main-left-project">
-        <div v-if="projectList.length" class="er-project-item" v-for="project in projectList" :key="project.id" @click="projectId = project.id">
+        <div v-if="projectList.length"
+             class="er-project-item"
+             v-for="(project, index) in projectList"
+             :key="project.id"
+             @click="projectClick(project, index)"
+             :style="{ backgroundColor: selectedProject === index ? 'lightblue' : '' }"
+        >
           <span><i class="iconfont">&#xe634;</i></span>
           <span>{{ project.projectName }}</span>
         </div>
@@ -88,7 +101,7 @@ onMounted(async () => {
     <div class="gap"></div>
     <main-right :curClickItem="currentClickItem"></main-right>
   </div>
-  <ProjectInfo v-model:visible="visible" @close="visible = false" :title="title"/>
+  <ProjectInfo v-model:visible="visible" @close="closeProjectInfo" :title="title"/>
 </template>
 
 <style scoped lang="scss">
