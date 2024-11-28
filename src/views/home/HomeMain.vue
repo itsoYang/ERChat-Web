@@ -7,6 +7,7 @@ import NoProject from "../../assets/images/NoProject.svg";
 import {IHomeMainLeftItem, menus} from "../../api/home/home.ts";
 import MainRight from "./MainRight.vue";
 import ProjectInfo from "../../components/ProjectInfo.vue";
+import EREmpty from "../../components/EREmpty.vue";
 
 const visible = ref(false)
 const title = ref('新建项目')
@@ -101,7 +102,7 @@ onMounted( () => {
           <span><i class="iconfont">&#xe634;</i></span>
           <span>{{ project.projectName }}</span>
         </div>
-        <el-empty v-else :image="NoProject" description="暂无项目"></el-empty>
+        <EREmpty v-else :image="NoProject" desc="暂无数据"></EREmpty>
       </div>
     </div>
     <div class="gap"></div>

@@ -6,7 +6,7 @@ import {loadDiagramsByProjectId, loadMyFavorites} from "../../api/home/home.ts";
 import NoDiagram from "../../assets/images/NoDiagram.svg"
 import EREmpty from "../../components/EREmpty.vue";
 
-const props = defineProps(['curClickItem', 'projectId'])
+const props = defineProps(['curClickItem'])
 
 const mainRightTitle = ref('')
 const projectId: Ref<string | null> = ref(null)
@@ -14,8 +14,8 @@ const diagrams: Ref<any[] | null> = ref(null)
 
 // 新建ER图
 const createERDiagram = () => {
-  // TODO 传递 projectId
-  window.open(`/designer?id=${props.projectId}`, '_blank')
+  // 创建
+  window.open(`/designer?id=${props.curClickItem.key}`, '_blank')
 }
 
 

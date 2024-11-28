@@ -1,23 +1,24 @@
 <script setup lang="ts">
-  import { onMounted } from "vue";
+  import {onMounted, Ref, ref} from "vue";
   import { Graph, Shape } from "@antv/x6";
   import { getTeleport } from '@antv/x6-vue-shape'
   import { useGraphRegister } from "../../hooks/useGraphRegister.ts";
   import { useGraphStore } from "../../stores/graph.ts";
   import { useGraphEvent } from "../../hooks/useGraphEvent.ts";
-  import { useAddNode, useCalcNodeHeight } from "../../hooks/useGraphNode.ts";
-  import { INodeData } from "../../types/graphTypes.ts";
   import {useRoute} from "vue-router";
   import Navigator from "./navigator.vue";
+
+  const route = useRoute();
+  const projectId: Ref<string | null> = ref(null)
 
   // 注册相关
   useGraphRegister()
 
-  const route = useRoute();
-
   const TeleportContainer = getTeleport()
 
   onMounted(() => {
+
+    // 初始化画布
     const graph = new Graph({
       container: document.getElementById('container'),
       autoResize: true,
@@ -56,13 +57,15 @@
 
     // 事件监听相关
     useGraphEvent()
+
+    projectId.value = route.query.id as string
   })
 
 
 </script>
 
 <template>
-  <navigator></navigator>
+  <navigator :projectId="projectId"></navigator>
   <div id="container" class="x6-graph-container"></div>
   <TeleportContainer />
 </template>

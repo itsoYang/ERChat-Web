@@ -40,7 +40,12 @@ interface IField {
     comment: string
 }
 
-const save = async () => {
+export const save = async (projectId: string | null) => {
+
+    if (!projectId){
+        throw new Error('Project id is not found')
+    }
+
     const graphStore = useGraphStore();
     const graph: Graph | null = graphStore.graph as Graph | null
     if (!graph){
@@ -74,10 +79,5 @@ const save = async () => {
     })
     diagram.elements = elements
 
-    console.log('保存后',diagram)
     await axios.post('/designer/save', diagram)
-}
-
-export {
-    save
 }
