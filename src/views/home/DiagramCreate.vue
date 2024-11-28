@@ -3,7 +3,7 @@
   import {reactive, ref, getCurrentInstance} from "vue";
   import type {FormInstance} from "element-plus";
   import {FormRules} from "element-plus";
-  import {diagramCreate} from "../../api/home/home.ts";
+  import {diagramCreate} from "../../api/home/diagram.ts";
 
   const diagramsCreateFormRef = ref<FormInstance>()
 
@@ -14,7 +14,7 @@
 
   const diagramInfo = ref({
     name: "",
-    visibility: ""
+    visibility: "public"
   })
 
   const checkDiagramName = (rule: any, value: any, callback: any) => {
@@ -67,6 +67,12 @@
       >
         <el-form-item label="ER图名称" prop="name">
           <el-input v-model="diagramInfo.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="可见性" prop="visibility">
+          <el-radio-group v-model="diagramInfo.visibility">
+            <el-radio value="public">公开</el-radio>
+            <el-radio value="private">私有</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <template #footer>

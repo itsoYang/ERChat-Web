@@ -5,6 +5,7 @@ import { Ref, ref, watch } from "vue";
 import {loadDiagramsByProjectId, loadMyFavorites} from "../../api/home/home.ts";
 import NoDiagram from "../../assets/images/NoDiagram.svg"
 import EREmpty from "../../components/EREmpty.vue";
+import DiagramCreate from "./DiagramCreate.vue";
 
 const props = defineProps(['curClickItem'])
 
@@ -16,6 +17,19 @@ const diagrams: Ref<any[] | null> = ref(null)
 const createERDiagram = () => {
   // 创建
   window.open(`/designer?id=${props.curClickItem.key}`, '_blank')
+}
+
+const diagramCreateDlg = ref({
+  visible: false,
+  title: ''
+})
+const openDiagramCreateDlg = () => {
+  diagramCreateDlg.value.visible = true
+  diagramCreateDlg.value.title = '新建ER图'
+}
+const closeDiagramCreateDlg = () => {
+  diagramCreateDlg.value.visible = false
+  diagramCreateDlg.value.title = ''
 }
 
 
@@ -56,7 +70,7 @@ watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
       </div>
       <div class="gap"></div>
       <div>
-        <el-button v-if="projectId" type="primary" @click="createERDiagram">新建ER图</el-button>
+        <el-button v-if="projectId" type="primary" @click="openDiagramCreateDlg">新建ER图</el-button>
       </div>
     </div>
     <div class="er-main-right-content">
@@ -79,6 +93,11 @@ watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
       ></EREmpty>
     </div>
   </div>
+  <DiagramCreate
+      :visible="diagramCreateDlg.visible"
+      :title="diagramCreateDlg.title"
+      @close="closeDiagramCreateDlg"
+  ></DiagramCreate>
 </template>
 
 <style scoped lang="scss">

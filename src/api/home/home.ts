@@ -53,6 +53,3 @@ export const loadDiagramsByProjectId = (projectId: string | null) => {
     }
 }
 
-export const diagramCreate = () => {
-
-}
