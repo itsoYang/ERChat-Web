@@ -52,3 +52,7 @@ export const loadDiagramsByProjectId = (projectId: string | null) => {
         return Promise.resolve({data})
     }
 }
+
+export const diagramCreate = () => {
+
+}
