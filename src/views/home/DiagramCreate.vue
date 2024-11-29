@@ -9,7 +9,7 @@
 
   const { proxy } = getCurrentInstance() as any
 
-  const props = defineProps(['visible', 'title'])
+  const props = defineProps(['visible', 'title', 'projectId'])
   const emit = defineEmits(['close'])
 
   const diagramInfo = ref({
@@ -28,20 +28,16 @@
     name: [{ validator: checkDiagramName, trigger: 'blur' }]
   })
   const closeDlg = () => {
-    emit('close', false)
+    emit('close', '')
   }
 
   const create = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate( async (valid) => {
       if (valid) {
-        const {success, message} = await diagramCreate()
+        const {success, data} = await diagramCreate(diagramInfo.value.name, diagramInfo.value.visibility, props.projectId)
         if (success){
-          emit('close', true)
-          proxy.$message({
-            message: message,
-            type: 'success'
-          })
+          emit('close', data)
         }
       }
     })

@@ -2,12 +2,15 @@
 
 import DiagramCard from "../../components/DiagramCard.vue";
 import { Ref, ref, watch } from "vue";
-import {loadDiagramsByProjectId, loadMyFavorites} from "../../api/home/home.ts";
+import {loadMyFavorites} from "../../api/home/home.ts";
+import {queryDiagramsByProjectId} from "../../api/home/diagram.ts"
 import NoDiagram from "../../assets/images/NoDiagram.svg"
 import EREmpty from "../../components/EREmpty.vue";
 import DiagramCreate from "./DiagramCreate.vue";
+import {useRouter} from "vue-router";
 
 const props = defineProps(['curClickItem'])
+const router = useRouter()
 
 const mainRightTitle = ref('')
 const projectId: Ref<string | null> = ref(null)
@@ -27,33 +30,28 @@ const openDiagramCreateDlg = () => {
   diagramCreateDlg.value.visible = true
   diagramCreateDlg.value.title = '新建ER图'
 }
-const closeDiagramCreateDlg = () => {
+const closeDiagramCreateDlg = (diagramId: string) => {
   diagramCreateDlg.value.visible = false
   diagramCreateDlg.value.title = ''
+  if (diagramId){
+    router.push({name: 'designer', params: {diagramId}})
+  }
 }
 
 
-watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
-  console.log('main right watch execute..', props.curClickItem)
+watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
   projectId.value = null
   if (newVal){
     mainRightTitle.value = props.curClickItem.label
+    diagrams.value = null
     if (props.curClickItem.type === 'menu'){
       if (props.curClickItem.key === 'my_favorites'){
-        const {data} = loadMyFavorites()
-        if (!data){
-          let _data = []
-          for (let i = 0; i < 5; i++) {
-            let obj = {title: `00${i + 1}`, content: `diagrams: ${i+1}`}
-            _data.push(obj)
-          }
-          diagrams.value = _data
-        }
+        const { data } = await loadMyFavorites()
+        diagrams.value = data as any[]
       }
     }else if (props.curClickItem.type === 'project'){
-      console.log('查询项目下的 diagrams')
       projectId.value = props.curClickItem.key
-      const { data } = loadDiagramsByProjectId(projectId.value)
+      const { data } = await queryDiagramsByProjectId(projectId.value)
       diagrams.value = data
     }
   }
@@ -97,6 +95,7 @@ watch(() => props.curClickItem, (newVal: any, oldVal: any) => {
       :visible="diagramCreateDlg.visible"
       :title="diagramCreateDlg.title"
       @close="closeDiagramCreateDlg"
+      :projectId="props.curClickItem.key"
   ></DiagramCreate>
 </template>
 

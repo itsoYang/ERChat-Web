@@ -14,5 +14,12 @@ export const diagramCreate = async (name: string, visibility: string, projectId:
         name,
         visibility
     }
-    return await axios.post('/project/diagram/create', diagram)
+    return await axios.post('/diagram/save', diagram)
+}
+
+export const queryDiagramsByProjectId = async (projectId: string | null) => {
+    if (!projectId){
+        return null
+    }
+    return await axios.get(`/diagram/list/${projectId}`)
 }

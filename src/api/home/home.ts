@@ -41,15 +41,3 @@ export const loadMyFavorites = async () => {
     }
 }
 
-export const loadDiagramsByProjectId = (projectId: string | null) => {
-    if (!projectId){
-        return null
-    }
-    try {
-        return axios.get(`/diagrams/${projectId}`)
-    } catch (e) {
-        const data = null
-        return Promise.resolve({data})
-    }
-}
-
