@@ -46,8 +46,7 @@ watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
     diagrams.value = null
     if (props.curClickItem.type === 'menu'){
       if (props.curClickItem.key === 'my_favorites'){
-        const { data } = await loadMyFavorites()
-        diagrams.value = data as any[]
+        await loadMyFavorites()
       }
     }else if (props.curClickItem.type === 'project'){
       projectId.value = props.curClickItem.key
@@ -78,8 +77,8 @@ watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
       >
         <diagram-card
             v-for="diagram in diagrams"
-            :title="diagram.title"
-            :content="diagram.content"
+            :title="diagram.name"
+            :content="diagram.name"
             :key="diagram.title"
         >
         </diagram-card>
@@ -92,6 +91,7 @@ watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
     </div>
   </div>
   <DiagramCreate
+      v-if="props.curClickItem"
       :visible="diagramCreateDlg.visible"
       :title="diagramCreateDlg.title"
       @close="closeDiagramCreateDlg"

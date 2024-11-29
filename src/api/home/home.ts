@@ -37,7 +37,7 @@ export const loadMyFavorites = async () => {
     try {
         return await axios.get(`/diagrams/favorites/${userId}`)
     } catch (e) {
-        console.log(e)
+        return null
     }
 }
 
