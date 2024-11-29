@@ -7,7 +7,7 @@ const routes = [
         component: () => import('../views/home/home.vue')
     },
     {
-        path: '/designer',
+        path: '/designer/:diagramId',
         name: 'designer',
         component: () => import('../views/designer/designer.vue'),
         props: true

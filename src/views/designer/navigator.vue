@@ -3,7 +3,7 @@
   import NodeEditor from "../../components/NodeEditor.vue";
   import {save} from "../../api/designer/designer.ts";
 
-  const props = defineProps(['projectId'])
+  const props = defineProps(['diagramId'])
 
   let nodeEditorVisible = ref(false)
   let nodeData = ref({
@@ -44,7 +44,7 @@
             </div>
           </el-dropdown-item>
           <el-dropdown-item>
-            <div class="menu-item" style="width: 75px;height: 30px;display: inline-flex;justify-content: center;align-items: center;" @click="save(props.projectId)">
+            <div class="menu-item" style="width: 75px;height: 30px;display: inline-flex;justify-content: center;align-items: center;" @click="save(props.diagramId)">
               <i class="iconfont">&#xe63b;</i>
               <span>保存</span>
             </div>

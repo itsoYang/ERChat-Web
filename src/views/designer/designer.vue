@@ -9,7 +9,7 @@
   import Navigator from "./navigator.vue";
 
   const route = useRoute();
-  const projectId: Ref<string | null> = ref(null)
+  const diagramId: Ref<string | null> = ref(null)
 
   // 注册相关
   useGraphRegister()
@@ -58,14 +58,14 @@
     // 事件监听相关
     useGraphEvent()
 
-    projectId.value = route.query.id as string
+    diagramId.value = route.params.diagramId as string
   })
 
 
 </script>
 
 <template>
-  <navigator :projectId="projectId"></navigator>
+  <navigator :diagramId="diagramId"></navigator>
   <div id="container" class="x6-graph-container"></div>
   <TeleportContainer />
 </template>

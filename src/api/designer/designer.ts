@@ -1,7 +1,6 @@
 import {useGraphStore} from "../../stores/graph.ts";
 import {Graph} from "@antv/x6";
 import axios from "../../utils/axios.ts";
-import {v4 as uuIdv4} from 'uuid';
 
 interface ERDiagram {
     id: string
@@ -40,10 +39,10 @@ interface IField {
     comment: string
 }
 
-export const save = async (projectId: string | null) => {
+export const save = async (diagramId: string | null) => {
 
-    if (!projectId){
-        throw new Error('Project id is not found')
+    if (!diagramId){
+        throw new Error('diagramId id is not found')
     }
 
     const graphStore = useGraphStore();
@@ -58,7 +57,7 @@ export const save = async (projectId: string | null) => {
 
     console.log('保存前',cells, 'ss', JSON.stringify(cells));
 
-    const diagramId = uuIdv4()
+    // const diagramId = uuIdv4()
     const diagram: ERDiagram = {
         id: diagramId,
         diagramName: 'test_'+diagramId,
