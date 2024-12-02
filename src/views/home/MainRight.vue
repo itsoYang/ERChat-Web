@@ -73,7 +73,7 @@ watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
     <div class="er-main-right-content">
       <div
           class="diagram-card-container"
-          v-if="diagrams"
+          v-if="diagrams && diagrams.length"
       >
         <diagram-card
             v-for="diagram in diagrams"

@@ -2,7 +2,7 @@
 
 import {onMounted, Ref, ref} from "vue";
 import Project from "../../api/home/type.ts";
-import {getProjectList} from "../../api/home/project.ts";
+import {deleteProject, getProjectList} from "../../api/home/project.ts";
 import NoProject from "../../assets/images/NoProject.svg";
 import {IHomeMainLeftItem, menus} from "../../api/home/home.ts";
 import MainRight from "./MainRight.vue";
@@ -10,6 +10,7 @@ import ProjectInfo from "../../components/ProjectInfo.vue";
 import EREmpty from "../../components/EREmpty.vue";
 
 const visible = ref(false)
+const popVisible = ref(false)
 const title = ref('新建项目')
 // 默认点击 第一个菜单
 const currentClickItem: Ref<IHomeMainLeftItem | null> = ref({
@@ -71,6 +72,13 @@ const loadProjectList = async () => {
   }
 }
 
+const projectDelete = async (id: string) => {
+  const {success} = await deleteProject(id)
+  if (success){
+    await loadProjectList()
+  }
+}
+
 onMounted( () => {
   loadProjectList()
 })
@@ -101,8 +109,29 @@ onMounted( () => {
              @click="projectClick(project, index)"
              :style="{ backgroundColor: selectedProject === index ? 'lightblue' : '' }"
         >
-          <span><i class="iconfont">&#xe634;</i></span>
-          <span>{{ project.projectName }}</span>
+          <div>
+            <span><i class="iconfont">&#xe634;</i></span>
+            <span>{{ project.projectName }}</span>
+          </div>
+          <div>
+            <el-popover :visible="popVisible" placement="right-start">
+              <template #reference>
+                <span @click="popVisible = !popVisible"><i class="iconfont icon-more"></i></span>
+              </template>
+              <template #default>
+                <div>
+                  <div style="display: flex; align-items: center;cursor: pointer;">
+                    <span @click="projectDelete(project.id)"><i class="iconfont icon-shanchu"></i></span>
+                    <span style="margin-left: 5px;">删除</span>
+                  </div>
+                  <div style="display: flex; align-items: center;cursor: pointer;">
+                    <span @click="projectDelete(project.id)"><i class="iconfont icon-bianji"></i></span>
+                    <span style="margin-left: 5px;">编辑</span>
+                  </div>
+                </div>
+              </template>
+            </el-popover>
+          </div>
         </div>
         <EREmpty v-else :image="NoProject" desc="暂无数据"></EREmpty>
       </div>
@@ -157,12 +186,20 @@ onMounted( () => {
       display: flex;
       flex-direction: column;
       .er-project-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         border-radius: 5px;
         padding: 5px 0;
-        display: inline-block;
         cursor: pointer;
         span:first-child{
           margin-right: 5px;
+        }
+        div:last-child{
+          display: none;
+        }
+        &:hover div:last-child{
+          display: inline-block;
         }
       }
       .er-project-item:hover{

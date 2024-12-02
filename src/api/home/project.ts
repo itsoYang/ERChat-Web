@@ -28,7 +28,7 @@ const getProjectList = async () => {
 
 // 删除项目
 const deleteProject = async (id: string) => {
-    return await axios.delete('/project/delete', { params: { id } })
+    return await axios.delete(`/project/${id}`)
 }
 
 // 更新项目
