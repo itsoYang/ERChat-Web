@@ -27,7 +27,7 @@
           v-model="searchQuery"
           placeholder="搜索..."
           class="search-input"
-          :suffix-icon="Search"
+          :prefix-icon="Search"
           @keyup.enter="search"
       />
     </div>

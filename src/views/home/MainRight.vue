@@ -104,7 +104,6 @@ watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
   display: flex;
   flex-direction: column;
   height: 85vh;
-  overflow: auto;
   background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
   .er-main-right-header {
     height: 75px;
@@ -123,6 +122,7 @@ watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
   }
   .er-main-right-content {
     height: calc(85vh - 75px);
+    overflow: auto;
     .diagram-card-container {
       display: flex;
       flex-wrap: wrap;

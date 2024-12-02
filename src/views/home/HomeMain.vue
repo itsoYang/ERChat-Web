@@ -79,6 +79,7 @@ onMounted( () => {
 <template>
   <div class="er-main">
     <div class="er-main-left">
+      <!--  菜单列表    -->
       <div class="er-main-left-menu">
         <div class="er-menu-item"
              :style="{ backgroundColor: selectedMenu === index ? 'lightblue' : '' }"
@@ -91,6 +92,7 @@ onMounted( () => {
         </div>
       </div>
       <div class="divider"></div>
+      <!--   项目列表   -->
       <div class="er-main-left-project">
         <div v-if="projectList.length"
              class="er-project-item"
