@@ -17,18 +17,17 @@
 
 ## 功能开发进度
 
-| 功能                      | 开发进度                                         |
-|-------------------------|----------------------------------------------|
-| 项目管理                 | ![Progress](https://progress-bar.dev/60)  60% |
-| ER图管理                 | ![Progress](https://progress-bar.dev/50)  50% |
-| ER图绘制设计器           | ![Progress](https://progress-bar.dev/40)  40% |
-| AI Agent集成            | ![Progress](https://progress-bar.dev/0)   0% |
-| 导入导出功能             | ![Progress](https://progress-bar.dev/0)  0%  |
-| 版本控制                 | ![Progress](https://progress-bar.dev/0)   0% |
-| 团队协作                 | ![Progress](https://progress-bar.dev/0)   0% |
-| 自定义模板               | ![Progress](https://progress-bar.dev/0)   0% |
+| 功能                      | 开发进度                              |
+|-------------------------|-----------------------------------|
+| 项目管理                 | ![](https://geps.dev/progress/60) |
+| ER图管理                 | ![](https://geps.dev/progress/50) |
+| ER图绘制设计器           | ![](https://geps.dev/progress/40) |
+| AI Agent集成            | ![](https://geps.dev/progress/0)  |
+| 导入导出功能             | ![](https://geps.dev/progress/0)  |
+| 版本控制                 | ![](https://geps.dev/progress/0)  |
+| 团队协作                 | ![](https://geps.dev/progress/0)  |
+| 自定义模板               | ![](https://geps.dev/progress/0)  |
 
-**注意**: 进度条使用了 [progress-bar.dev](https://progress-bar.dev/) 生成器，可以根据实际进展更新百分比。
 
 ## 技术栈
 
