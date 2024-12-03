@@ -1,4 +1,4 @@
-# ER图绘制工具
+# ERChat
 
 ## 介绍
 
@@ -17,28 +17,21 @@
 
 ## 功能开发进度
 
-| 功能                      | 开发进度                              |
-|-------------------------|-----------------------------------|
-| 项目管理                 | ![](https://geps.dev/progress/60) |
-| ER图管理                 | ![](https://geps.dev/progress/50) |
-| ER图绘制设计器           | ![](https://geps.dev/progress/40) |
-| AI Agent集成            | ![](https://geps.dev/progress/0)  |
-| 导入导出功能             | ![](https://geps.dev/progress/0)  |
-| 版本控制                 | ![](https://geps.dev/progress/0)  |
-| 团队协作                 | ![](https://geps.dev/progress/0)  |
-| 自定义模板               | ![](https://geps.dev/progress/0)  |
+| 功能                      | 开发进度                                                                                     |
+|-------------------------|------------------------------------------------------------------------------------------|
+| 项目管理                 | ![](https://geps.dev/progress/60?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32) |
+| ER图管理                 | ![](https://geps.dev/progress/50?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32)                                                        |
+| ER图绘制设计器           | ![](https://geps.dev/progress/40?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32)                                                        |
+| AI Agent集成            | ![](https://geps.dev/progress/0?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32)                                                         |
+| 导入导出功能             | ![](https://geps.dev/progress/0?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32)                                                         |
+| 版本控制                 | ![](https://geps.dev/progress/0?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32)                                                         |
+| 团队协作                 | ![](https://geps.dev/progress/0?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32)                                                         |
+| 自定义模板               | ![](https://geps.dev/progress/0?warningColor=32CD32&dangerColor=32CD32&successColor=32CD32)                                                         |
 
 
 ## 技术栈
 
-- **前端**: Vue 3 + TypeScript
+- **前端**: Vue3 + TypeScript + Antv X6
 - **状态管理**: Pinia
 - **样式**: CSS / SCSS /
 - **构建工具**: Vite
-
-## 安装与使用
-
-1. 克隆项目代码：
-   ```bash
-   git clone https://github.com/yourusername/yourproject.git
-   cd yourproject
