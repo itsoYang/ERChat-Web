@@ -11,7 +11,7 @@ import EREmpty from "../../components/EREmpty.vue";
 
 const visible = ref(false)
 const popVisible = ref(false)
-const title = ref('新建项目')
+const title = ref('')
 // 默认点击 第一个菜单
 const currentClickItem: Ref<IHomeMainLeftItem | null> = ref({
   type: 'menu',
@@ -28,9 +28,12 @@ const selectedProject: Ref<number | null> = ref(null);
 
 const projectList = ref<Project[]>([])
 
+const projectInfo: Ref<ProjectInfo | null> = ref(null)
+
 const menuClick = (menu: any, index: number) => {
   selectedMenu.value = index
   selectedProject.value = null
+  projectInfo.value = null
   if (menu.key === 'my_favorites'){
     currentClickItem.value = {
       type: 'menu',
@@ -39,13 +42,15 @@ const menuClick = (menu: any, index: number) => {
     }
   }else if (menu.key === 'create_project'){
     currentClickItem.value = null // 右侧刷新
-    openProjectInfo()
+    title.value = '新建项目'
+    openProjectInfo(null)
   }
 }
 
 const projectClick = (project: Project, index: number) => {
   selectedProject.value = index
   selectedMenu.value = null
+  projectInfo.value = project
   currentClickItem.value = {
     type: 'project',
     label: project.projectName,
@@ -53,8 +58,11 @@ const projectClick = (project: Project, index: number) => {
   }
 }
 
-const openProjectInfo = () => {
+const openProjectInfo = (projectId: string | null) => {
   visible.value = true
+  if (projectId){
+    title.value = '编辑项目'
+  }
 }
 const closeProjectInfo = (isConfirm: boolean) => {
   if (isConfirm){
@@ -120,12 +128,12 @@ onMounted( () => {
               </template>
               <template #default>
                 <div>
-                  <div style="display: flex; align-items: center;cursor: pointer;">
-                    <span @click="projectDelete(project.id)"><i class="iconfont icon-shanchu"></i></span>
+                  <div style="display: flex; align-items: center;cursor: pointer;" @click="projectDelete(project.id)">
+                    <span><i class="iconfont icon-shanchu"></i></span>
                     <span style="margin-left: 5px;">删除</span>
                   </div>
-                  <div style="display: flex; align-items: center;cursor: pointer;">
-                    <span @click="projectDelete(project.id)"><i class="iconfont icon-bianji"></i></span>
+                  <div style="display: flex; align-items: center;cursor: pointer;" @click="openProjectInfo(project.id)">
+                    <span><i class="iconfont icon-bianji"></i></span>
                     <span style="margin-left: 5px;">编辑</span>
                   </div>
                 </div>
@@ -139,7 +147,7 @@ onMounted( () => {
     <div class="gap"></div>
     <main-right :curClickItem="currentClickItem"></main-right>
   </div>
-  <ProjectInfo v-model:visible="visible" @close="closeProjectInfo" :title="title"/>
+  <ProjectInfo v-model:visible="visible" @close="closeProjectInfo" :title="title" :projectInfo="projectInfo"/>
 </template>
 
 <style scoped lang="scss">

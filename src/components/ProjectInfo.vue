@@ -1,31 +1,45 @@
 <script setup lang="ts">
-  import {reactive, ref, getCurrentInstance} from 'vue'
+  import {reactive, ref, getCurrentInstance, Ref, onMounted} from 'vue'
   import type { FormInstance, FormRules } from 'element-plus'
-  import {createProject} from "../api/home/project.ts";
+  import {createProject, ProjectInfo, updateProject} from "../api/home/project.ts";
 
   const {proxy} = getCurrentInstance() as any
 
   const projectInfoFormRef = ref<FormInstance>()
 
-  const props = defineProps(["visible", "title"])
+  const props = defineProps(["visible", "title", "projectInfo"])
   const emit = defineEmits(['close'])
 
-  const projectInfo = ref({
-    name: "",
-    desc: ""
+  const projectInfo: Ref<ProjectInfo> = ref(props.projectInfo ? props.projectInfo : {
+    id: null,
+    projectDesc: null,
+    projectName: null
   })
 
   const confirm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate( async (valid) => {
       if (valid) {
-        const {success, message} = await createProject(projectInfo.value.name, projectInfo.value.desc)
-        if (success){
-          emit('close', true)
-          proxy.$message({
-            message: message,
-            type: 'success'
-          })
+        if (projectInfo.value.id){
+          const {success, message} = await updateProject(projectInfo.value)
+          if (success){
+            emit('close', true)
+            proxy.$message({
+              message: message,
+              type: 'success'
+            })
+          }
+          return
+        }
+        if (projectInfo.value.projectName && projectInfo.value.projectDesc){
+          const {success, message} = await createProject(projectInfo.value.projectName, projectInfo.value.projectDesc)
+          if (success){
+            emit('close', true)
+            proxy.$message({
+              message: message,
+              type: 'success'
+            })
+          }
         }
       }
     })
@@ -33,10 +47,7 @@
 
   const closeDlg = () => {
     emit('close', false)
-    projectInfo.value = {
-      name: "",
-      desc: ""
-    }
+    projectInfo.value = null
   }
 
   const checkProjectName = (rule: any, value: any, callback: any) => {
@@ -47,7 +58,7 @@
   }
 
   const rules = reactive<FormRules<typeof ruleForm>>({
-    name: [{ validator: checkProjectName, trigger: 'blur' }]
+    projectName: [{ validator: checkProjectName, trigger: 'blur' }]
   })
 
 </script>
@@ -69,12 +80,12 @@
           status-icon
           label-position="top"
       >
-        <el-form-item label="项目名称" prop="name">
-          <el-input v-model="projectInfo.name" autocomplete="off" />
+        <el-form-item label="项目名称" prop="projectName">
+          <el-input v-model="projectInfo.projectName" autocomplete="off" />
         </el-form-item>
         <el-form-item label="项目描述">
           <el-input
-              v-model="projectInfo.desc"
+              v-model="projectInfo.projectDesc"
               :rows="4"
               type="textarea"
               placeholder="请输入项目描述信息"

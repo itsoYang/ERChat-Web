@@ -2,6 +2,12 @@ import Project from "./type.ts";
 import axios from "../../utils/axios.ts";
 import {v4 as uuIdv4} from 'uuid';
 
+export interface ProjectInfo {
+    id?: string,
+    projectName?: string
+    projectDesc?: string | null
+}
+
 
 // 创建项目
 const createProject = async (projectName: string, projectDesc: string) => {
@@ -32,7 +38,7 @@ const deleteProject = async (id: string) => {
 }
 
 // 更新项目
-const updateProject = async (project: Project) => {
+const updateProject = async (project: ProjectInfo) => {
     await axios.put('/project/update', project)
 }
 
