@@ -10,42 +10,35 @@ export interface ProjectInfo {
 
 
 // 创建项目
-const createProject = async (projectName: string, projectDesc: string) => {
+export const createProject = async (projectName: string, projectDesc: string) => {
     const project: Project = {
         id: uuIdv4(),
         projectName,
         projectDesc
     }
     try {
-        return await axios.post('/project/save', project)
+        return await axios.post('/project', project)
     } catch (e) {
         console.log('请求错误信息：',JSON.stringify(e))
     }
 }
 
 // 获取项目列表
-const getProjectList = async () => {
+export const getProjectList = async () => {
     try {
-        return await axios.get('/project/list')
+        return await axios.get('/project')
     } catch (e) {
-
+        console.log('请求错误信息：',JSON.stringify(e))
     }
 }
 
 // 删除项目
-const deleteProject = async (id: string) => {
+export const deleteProject = async (id: string) => {
     return await axios.delete(`/project/${id}`)
 }
 
 // 更新项目
-const updateProject = async (project: ProjectInfo) => {
-    await axios.put('/project/update', project)
-}
-
-export {
-    createProject,
-    getProjectList,
-    deleteProject,
-    updateProject
+export const updateProject = async (project: ProjectInfo) => {
+    await axios.put('/project', project)
 }
 
