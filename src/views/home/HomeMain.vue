@@ -1,16 +1,13 @@
 <script setup lang="ts">
 
-import {onMounted, Ref, ref} from "vue";
+import {Ref, ref} from "vue";
 import Project from "../../api/home/type.ts";
-import {deleteProject, getProjectList} from "../../api/home/project.ts";
-import NoProject from "../../assets/images/NoProject.svg";
 import {IHomeMainLeftItem, menus} from "../../api/home/home.ts";
 import MainRight from "./MainRight.vue";
 import ProjectInfo from "../../components/ProjectInfo.vue";
-import EREmpty from "../../components/EREmpty.vue";
+import ProjectList from "./ProjectList.vue";
 
 const visible = ref(false)
-const popVisible = ref(false)
 const title = ref('')
 // 默认点击 第一个菜单
 const currentClickItem: Ref<IHomeMainLeftItem | null> = ref({
@@ -46,16 +43,20 @@ const menuClick = (menu: any, index: number) => {
     openProjectInfo(null)
   }
 }
-
-const projectClick = (project: Project, index: number) => {
-  selectedProject.value = index
+const projectClick = (project: Project) => {
   selectedMenu.value = null
-  projectInfo.value = project
   currentClickItem.value = {
     type: 'project',
     label: project.projectName,
     key: project.id
   }
+}
+
+const closeProjectInfo = (isConfirm: boolean) => {
+  if (isConfirm){
+    // TODO 刷新项目列表
+  }
+  visible.value = false
 }
 
 const openProjectInfo = (projectId: string | null) => {
@@ -64,32 +65,6 @@ const openProjectInfo = (projectId: string | null) => {
     title.value = '编辑项目'
   }
 }
-const closeProjectInfo = (isConfirm: boolean) => {
-  if (isConfirm){
-    loadProjectList()
-  }
-  visible.value = false
-  selectedMenu.value = null
-}
-
-const loadProjectList = async () => {
-  const {success, data} = await getProjectList()
-  if (success){
-    projectList.value = data as Project[]
-    console.log(projectList.value)
-  }
-}
-
-const projectDelete = async (id: string) => {
-  const {success} = await deleteProject(id)
-  if (success){
-    await loadProjectList()
-  }
-}
-
-onMounted( () => {
-  loadProjectList()
-})
 </script>
 
 <template>
@@ -109,40 +84,7 @@ onMounted( () => {
       </div>
       <div class="divider"></div>
       <!--   项目列表   -->
-      <div class="er-main-left-project">
-        <div v-if="projectList.length"
-             class="er-project-item"
-             v-for="(project, index) in projectList"
-             :key="project.id"
-             @click="projectClick(project, index)"
-             :style="{ backgroundColor: selectedProject === index ? 'lightblue' : '' }"
-        >
-          <div>
-            <span><i class="iconfont">&#xe634;</i></span>
-            <span>{{ project.projectName }}</span>
-          </div>
-          <div>
-            <el-popover :visible="popVisible" placement="right-start">
-              <template #reference>
-                <span @click="popVisible = !popVisible"><i class="iconfont icon-more"></i></span>
-              </template>
-              <template #default>
-                <div>
-                  <div style="display: flex; align-items: center;cursor: pointer;" @click="projectDelete(project.id)">
-                    <span><i class="iconfont icon-shanchu"></i></span>
-                    <span style="margin-left: 5px;">删除</span>
-                  </div>
-                  <div style="display: flex; align-items: center;cursor: pointer;" @click="openProjectInfo(project.id)">
-                    <span><i class="iconfont icon-bianji"></i></span>
-                    <span style="margin-left: 5px;">编辑</span>
-                  </div>
-                </div>
-              </template>
-            </el-popover>
-          </div>
-        </div>
-        <EREmpty v-else :image="NoProject" desc="暂无数据"></EREmpty>
-      </div>
+      <ProjectList :curProject="selectedProject" @projectClick="projectClick"></ProjectList>
     </div>
     <div class="gap"></div>
     <main-right :curClickItem="currentClickItem"></main-right>
@@ -162,7 +104,6 @@ onMounted( () => {
   grid-template-columns: 1.5fr 0.2fr 3.5fr;
   .er-main-left,.er-main-right {
     border-radius: 5px;
-    //background-color: #24b8a6;
     background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
   }
   .er-main-left {
@@ -190,31 +131,6 @@ onMounted( () => {
       border: 1px solid #ccc;
       margin: 15px 0;
     }
-    .er-main-left-project {
-      display: flex;
-      flex-direction: column;
-      .er-project-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 5px;
-        padding: 5px 0;
-        cursor: pointer;
-        span:first-child{
-          margin-right: 5px;
-        }
-        div:last-child{
-          display: none;
-        }
-        &:hover div:last-child{
-          display: inline-block;
-        }
-      }
-      .er-project-item:hover{
-        background-color: #e6e6e6;
-      }
-    }
   }
-
 }
 </style>

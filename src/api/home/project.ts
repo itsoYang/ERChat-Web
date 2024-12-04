@@ -2,7 +2,7 @@ import Project from "./type.ts";
 import axios from "../../utils/axios.ts";
 import {v4 as uuIdv4} from 'uuid';
 
-export interface ProjectInfo {
+export interface IProjectInfo {
     id?: string,
     projectName?: string
     projectDesc?: string | null
@@ -38,7 +38,7 @@ export const deleteProject = async (id: string) => {
 }
 
 // 更新项目
-export const updateProject = async (project: ProjectInfo) => {
+export const updateProject = async (project: IProjectInfo) => {
     await axios.put('/project', project)
 }
 
