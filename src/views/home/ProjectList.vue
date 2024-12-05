@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {Ref, ref, onMounted, watch} from "vue";
-  import Project from "../../api/home/type.ts";
+  import {Ref, ref, onMounted, watch} from "vue";
   import {deleteProject, getProjectList, IProjectInfo} from "../../api/home/project.ts";
   import NoProject from "../../assets/images/NoProject.svg";
   import EREmpty from "../../components/EREmpty.vue";
@@ -12,37 +11,38 @@ import {Ref, ref, onMounted, watch} from "vue";
   const visible = ref(false)
   const popVisible = ref(false)
   const title = ref('')
+
   const projectData: Ref<IProjectInfo | null> = ref(null)
   // 当前选择的项目索引
   const selectedProject: Ref<number | null> = ref(null);
 
 
-  const projectList: Ref<IProjectInfo[]> = ref([])
+  const projectList: Ref<IProjectInfo[] | null> = ref([])
 
-  const projectDelete = async (id: string) => {
+  const projectDelete = async (id: string | undefined) => {
+    popVisible.value = false
+    if (!id){
+      return
+    }
     const {success} = await deleteProject(id)
     if (success){
       await loadProjectList()
     }
   }
 
-  const projectClick = (project: Project, index: number) => {
+  const projectClick = (project: IProjectInfo, index: number) => {
     selectedProject.value = index
-    // selectedMenu.value = null
     projectData.value = project
-    // currentClickItem.value = {
-    //   type: 'project',
-    //   label: project.projectName,
-    //   key: project.id
-    // }
-    emit('projectClick', project)
+    emit('projectClick', project, index)
   }
 
-  const openProjectInfo = (projectId: string | null) => {
-    visible.value = true
-    if (projectId){
+  const openProjectInfo = (project: IProjectInfo) => {
+    popVisible.value = false
+    if (project){
       title.value = '编辑项目'
+      projectData.value = project
     }
+    visible.value = true
   }
 
   const closeProjectInfo = (isConfirm: boolean) => {
@@ -50,12 +50,13 @@ import {Ref, ref, onMounted, watch} from "vue";
       loadProjectList()
     }
     visible.value = false
+    projectData.value = null
   }
 
   const loadProjectList = async () => {
     const {success, data} = await getProjectList()
     if (success){
-      projectList.value = data as Project[]
+      projectList.value = data as IProjectInfo[]
     }
   }
 
@@ -64,16 +65,13 @@ import {Ref, ref, onMounted, watch} from "vue";
   })
 
   watch(() => props.curProject, (newVal: any, oldVal: any) => {
-    console.log('selectedProject', props.curProject)
-    if (newVal){
-      selectedProject.value = null
-    }
+    selectedProject.value = newVal
   }, {immediate: true})
 </script>
 
 <template>
-  <div class="er-main-left-project">
-    <div v-if="projectList.length"
+  <div class="er-project-list">
+    <div v-if="projectList"
          class="er-project-item"
          v-for="(project, index) in projectList"
          :key="project.id"
@@ -84,7 +82,10 @@ import {Ref, ref, onMounted, watch} from "vue";
         <span>{{ project.projectName }}</span>
       </div>
       <div>
-        <el-popover :visible="popVisible" placement="right-start">
+        <el-popover
+            :visible="popVisible"
+            placement="right-start"
+        >
           <template #reference>
             <span @click="popVisible = !popVisible"><i class="iconfont icon-more"></i></span>
           </template>
@@ -94,7 +95,7 @@ import {Ref, ref, onMounted, watch} from "vue";
                 <span><i class="iconfont icon-shanchu"></i></span>
                 <span style="margin-left: 5px;">删除</span>
               </div>
-              <div style="display: flex; align-items: center;cursor: pointer;" @click="openProjectInfo(project.id)">
+              <div style="display: flex; align-items: center;cursor: pointer;" @click="openProjectInfo(project)">
                 <span><i class="iconfont icon-bianji"></i></span>
                 <span style="margin-left: 5px;">编辑</span>
               </div>
@@ -105,11 +106,17 @@ import {Ref, ref, onMounted, watch} from "vue";
     </div>
     <EREmpty v-else :image="NoProject" desc="暂无数据"></EREmpty>
   </div>
-  <ProjectInfo v-model:visible="visible" @close="closeProjectInfo" :title="title" :projectInfo="projectData"/>
+  <ProjectInfo
+      v-if="visible"
+      :visible="visible"
+      @close="closeProjectInfo"
+      :title="title"
+      :projectData="projectData"
+  />
 </template>
 
 <style scoped lang="scss">
-.er-main-left-project {
+.er-project-list {
   display: flex;
   flex-direction: column;
   .er-project-item {

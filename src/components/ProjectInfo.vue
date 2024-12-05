@@ -1,19 +1,19 @@
 <script setup lang="ts">
   import {reactive, ref, getCurrentInstance, Ref, onMounted} from 'vue'
   import type { FormInstance, FormRules } from 'element-plus'
-  import {createProject, ProjectInfo, updateProject} from "../api/home/project.ts";
+  import {createProject, IProjectInfo, updateProject} from "../api/home/project.ts";
 
   const {proxy} = getCurrentInstance() as any
 
   const projectInfoFormRef = ref<FormInstance>()
 
-  const props = defineProps(["visible", "title", "projectInfo"])
+  const props = defineProps(["visible", "title", "projectData"])
   const emit = defineEmits(['close'])
 
-  const projectInfo: Ref<ProjectInfo> = ref(props.projectInfo ? props.projectInfo : {
-    id: null,
+  const projectInfo: Ref<IProjectInfo> = ref(props.projectData ? props.projectData : {
     projectDesc: null,
-    projectName: null
+    projectName: null,
+    id: null
   })
 
   const confirm = (formEl: FormInstance | undefined) => {
@@ -60,7 +60,6 @@
   const rules = reactive<FormRules<typeof ruleForm>>({
     projectName: [{ validator: checkProjectName, trigger: 'blur' }]
   })
-
 </script>
 
 <template>
