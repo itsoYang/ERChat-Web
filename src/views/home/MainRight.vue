@@ -80,6 +80,7 @@ watch(() => props.curClickItem, async (newVal: any, oldVal: any) => {
             :title="diagram.name"
             :content="diagram.name"
             :key="diagram.title"
+            :diagramId="diagram.id"
         >
         </diagram-card>
       </div>

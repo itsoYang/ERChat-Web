@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
-  const props = defineProps(['title', 'content'])
+  import {useRouter} from "vue-router";
 
+  const props = defineProps(['title', 'content', 'diagramId'])
+  const router = useRouter()
 
   const handleClick = () => {
-
+    router.push({name: 'designer', params: {diagramId: props.diagramId}})
   }
 
 </script>
@@ -32,6 +34,7 @@
     margin: 20px;
     transition: box-shadow 0.3s, transform 0.3s;
     background-color: #fff;
+    cursor: pointer;
     .card-header {
       padding: 16px;
       background-color: #f5f5f5;

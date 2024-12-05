@@ -78,5 +78,5 @@ export const save = async (diagramId: string | null) => {
     })
     diagram.elements = elements
 
-    await axios.post('/designer/save', diagram)
+    await axios.post('/diagram', diagram)
 }

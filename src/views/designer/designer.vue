@@ -73,5 +73,6 @@
 <style scoped>
 .x6-graph-container {
   border: 1px solid #ddd;
+  height: 100%;
 }
 </style>

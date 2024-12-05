@@ -2,12 +2,13 @@
   import { ref } from 'vue'
   import NodeEditor from "../../components/NodeEditor.vue";
   import {save} from "../../api/designer/designer.ts";
+  import {v4 as uuIdv4} from 'uuid';
 
   const props = defineProps(['diagramId'])
 
   let nodeEditorVisible = ref(false)
   let nodeData = ref({
-    id: '002',
+    id: uuIdv4(),
     tableName: '',
     tableComment: '',
     fields: [
@@ -21,10 +22,6 @@
 
   const addERNode = () => {
     nodeEditorVisible.value = true
-  }
-
-  // 打开保存对话框
-  const openSaveDlg = () => {
   }
 
 </script>

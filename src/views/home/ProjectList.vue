@@ -77,7 +77,7 @@
          :key="project.id"
          :style="{ backgroundColor: selectedProject === index ? 'lightblue' : '' }"
     >
-      <div @click="projectClick(project, index)">
+      <div style="width: 80%;" @click="projectClick(project, index)">
         <span><i class="iconfont">&#xe634;</i></span>
         <span>{{ project.projectName }}</span>
       </div>
