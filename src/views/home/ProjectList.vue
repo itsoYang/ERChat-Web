@@ -71,7 +71,7 @@
 
 <template>
   <div class="er-project-list">
-    <div v-if="projectList"
+    <div v-if="projectList && projectList.length"
          class="er-project-item"
          v-for="(project, index) in projectList"
          :key="project.id"
