@@ -7,9 +7,22 @@
   import { useGraphEvent } from "../../hooks/useGraphEvent.ts";
   import {useRoute} from "vue-router";
   import Navigator from "./navigator.vue";
+  import {queryDiagramById} from "../../api/designer/designer.ts";
+  import { ElLoading } from 'element-plus'
 
   const route = useRoute();
   const diagramId: Ref<string | null> = ref(null)
+
+  const loadDiagram = async (diagramId: string | null, graph: Graph) => {
+    if (diagramId === null){
+      throw new Error("diagramId is null")
+    }
+    const { success, data } = await queryDiagramById(diagramId)
+    if (success && data){
+      graph.fromJSON(data.elements)
+    }
+    ElLoading.service().close()
+  }
 
   // 注册相关
   useGraphRegister()
@@ -17,6 +30,10 @@
   const TeleportContainer = getTeleport()
 
   onMounted(() => {
+
+    ElLoading.service({
+      text: '加载中...'
+    })
 
     // 初始化画布
     const graph = new Graph({
@@ -52,6 +69,7 @@
 
     graph.enablePanning();
 
+    // 全局存储 graph 对象
     const graphStore = useGraphStore()
     graphStore.setGraph(graph)
 
@@ -59,6 +77,9 @@
     useGraphEvent()
 
     diagramId.value = route.params.diagramId as string
+
+    // 初始化画布数据
+    loadDiagram(diagramId.value, graph)
   })
 
 

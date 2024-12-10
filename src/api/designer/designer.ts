@@ -80,3 +80,7 @@ export const save = async (diagramId: string | null) => {
 
     await axios.post('/diagram', diagram)
 }
+
+export const queryDiagramById = async (diagramId: string) => {
+    return await axios.get('/diagram/'+diagramId)
+}
