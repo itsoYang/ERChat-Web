@@ -8,9 +8,12 @@
   import ProjectList from "./ProjectList.vue";
   import {IProjectInfo} from "../../api/home/project.ts";
   import MenuList from "./MenuList.vue";
+  import {v4 as uuIdv4} from 'uuid';
 
   const visible = ref(false)
   const title = ref('')
+  const projectListKey: Ref<string> = ref(uuIdv4())
+
   // 默认点击 第一个菜单
   const currentClickItem: Ref<IHomeMainLeftItem | null> = ref({
     type: 'menu',
@@ -52,7 +55,8 @@
 
 const closeProjectInfo = (isConfirm: boolean) => {
   if (isConfirm){
-    // TODO 刷新项目列表
+    // 刷新项目列表
+    projectListKey.value = uuIdv4()
   }
   visible.value = false
   projectData.value = null
@@ -71,13 +75,21 @@ const openProjectInfo = (projectId: string | null) => {
   <div class="er-main">
     <div class="er-main-left">
       <!--  菜单列表    -->
-      <MenuList :curMenu="selectedMenu" @menuClick="menuClick"></MenuList>
+      <MenuList
+          :curMenu="selectedMenu"
+          @menuClick="menuClick" />
       <div class="divider"></div>
       <!--   项目列表   -->
-      <ProjectList :curProject="selectedProject" @projectClick="projectClick"></ProjectList>
+      <ProjectList
+          :key="projectListKey"
+          :curProject="selectedProject"
+          @projectClick="projectClick"
+      />
     </div>
     <div class="gap"></div>
-    <main-right :curClickItem="currentClickItem"></main-right>
+    <main-right
+        :curClickItem="currentClickItem"
+    />
   </div>
   <ProjectInfo
       v-if="visible"

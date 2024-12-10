@@ -78,9 +78,9 @@ export const save = async (diagramId: string | null) => {
     })
     diagram.elements = elements
 
-    await axios.post('/diagram', diagram)
+    return await axios.post('/diagram', diagram)
 }
 
-export const queryDiagramById = async (diagramId: string) => {
+export const getDiagramInfoById = async (diagramId: string) => {
     return await axios.get('/diagram/'+diagramId)
 }

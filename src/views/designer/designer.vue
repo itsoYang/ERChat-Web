@@ -7,7 +7,7 @@
   import { useGraphEvent } from "../../hooks/useGraphEvent.ts";
   import {useRoute} from "vue-router";
   import Navigator from "./navigator.vue";
-  import {queryDiagramById} from "../../api/designer/designer.ts";
+  import {getDiagramInfoById} from "../../api/designer/designer.ts";
   import { ElLoading } from 'element-plus'
 
   const route = useRoute();
@@ -17,7 +17,7 @@
     if (diagramId === null){
       throw new Error("diagramId is null")
     }
-    const { success, data } = await queryDiagramById(diagramId)
+    const { success, data } = await getDiagramInfoById(diagramId)
     if (success && data){
       graph.fromJSON(data.elements)
     }

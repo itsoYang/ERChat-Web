@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import {getCurrentInstance, ref} from 'vue'
   import NodeEditor from "../../components/NodeEditor.vue";
   import {save} from "../../api/designer/designer.ts";
   import {v4 as uuIdv4} from 'uuid';
+
+  const {proxy} = getCurrentInstance() as any
 
   const props = defineProps(['diagramId'])
 
@@ -24,6 +26,16 @@
     nodeEditorVisible.value = true
   }
 
+  const saveDiagram = async () => {
+    const {success,message} = await save(props.diagramId)
+    if (success){
+      proxy.$message({
+        message: message,
+        type: 'success'
+      })
+    }
+  }
+
 </script>
 
 <template>
@@ -41,7 +53,7 @@
             </div>
           </el-dropdown-item>
           <el-dropdown-item>
-            <div class="menu-item" style="width: 75px;height: 30px;display: inline-flex;justify-content: center;align-items: center;" @click="save(props.diagramId)">
+            <div class="menu-item" style="width: 75px;height: 30px;display: inline-flex;justify-content: center;align-items: center;" @click="saveDiagram">
               <i class="iconfont">&#xe63b;</i>
               <span>保存</span>
             </div>

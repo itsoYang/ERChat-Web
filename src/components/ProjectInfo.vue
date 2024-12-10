@@ -20,6 +20,7 @@
     if (!formEl) return
     formEl.validate( async (valid) => {
       if (valid) {
+        // 更新项目
         if (projectInfo.value.id){
           const {success, message} = await updateProject(projectInfo.value)
           if (success){
@@ -31,15 +32,14 @@
           }
           return
         }
-        if (projectInfo.value.projectName && projectInfo.value.projectDesc){
-          const {success, message} = await createProject(projectInfo.value.projectName, projectInfo.value.projectDesc)
-          if (success){
-            emit('close', true)
-            proxy.$message({
-              message: message,
-              type: 'success'
-            })
-          }
+        // 创建项目
+        const {success, message} = await createProject(projectInfo.value.projectName, projectInfo.value.projectDesc)
+        if (success){
+          emit('close', true)
+          proxy.$message({
+            message: message,
+            type: 'success'
+          })
         }
       }
     })
