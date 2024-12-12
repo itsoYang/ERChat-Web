@@ -38,12 +38,12 @@
     </div>
     <div class="verify-code">
       <el-input v-model="verifyCode" placeholder="验证码"></el-input>
-      <el-button type="primary" :disabled="isCounting" @click="sendVerificationCode">
+      <el-button style="width: 100px;" type="primary" :disabled="isCounting" @click="sendVerificationCode">
         {{ isCounting ? `${countdown}秒后重发` : '发送验证码' }}
       </el-button>
     </div>
     <div>
-      <el-button style="width: 100%" type="primary" @click="verifyCodeLogin">开始使用</el-button>
+      <el-button style="width: 100%;" type="primary" @click="verifyCodeLogin">开始使用</el-button>
     </div>
   </div>
 </template>

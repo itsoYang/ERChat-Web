@@ -4,15 +4,19 @@
   import LoginCode from "./VerifyCodeLogin.vue";
   import LoginPassword from "./PasswordLogin.vue";
 
-  const loginType = ref('code')
+  const loginType = ref('password')
+
+  const changeLoginType = (type: string) => {
+    loginType.value = type
+  }
 </script>
 
 <template>
   <el-image :src="bgImg" style="width: 100%;height: 100%;" fit="fill"></el-image>
   <div class="er-login-container">
     <div class="login-type">
-      <el-text type="warning">账号密码登录</el-text>
-      <el-text type="info">手机号登录</el-text>
+      <el-text type="warning" @click="changeLoginType('password')">密码</el-text>
+      <el-text type="info" @click="changeLoginType('code')">验证码</el-text>
     </div>
     <LoginCode v-if="loginType === 'code'"/>
     <login-password v-else/>
@@ -36,7 +40,7 @@
   .er-login-container {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 40%;
     transform: translate(-50%, -50%);
     width: 400px;
     height: 300px;
@@ -48,6 +52,11 @@
     .login-type{
       display: flex;
       justify-content: center;
+      .el-text{
+        margin: 0 10px;
+        color: aliceblue;
+        cursor: pointer;
+      }
     }
   }
 
