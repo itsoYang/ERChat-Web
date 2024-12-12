@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import bgImg from "../../assets/login/bg01.jpg";
   import {ref} from "vue";
-  import LoginCode from "./LoginCode.vue";
-  import LoginPassword from "./LoginPassword.vue";
+  import LoginCode from "./VerifyCodeLogin.vue";
+  import LoginPassword from "./PasswordLogin.vue";
 
   const loginType = ref('code')
 </script>
@@ -11,8 +11,8 @@
   <el-image :src="bgImg" style="width: 100%;height: 100%;" fit="fill"></el-image>
   <div class="er-login-container">
     <div class="login-type">
-      <el-button type="primary" plain>账号密码登录</el-button>
-      <el-button type="primary" plain>手机号登录</el-button>
+      <el-text type="warning">账号密码登录</el-text>
+      <el-text type="info">手机号登录</el-text>
     </div>
     <LoginCode v-if="loginType === 'code'"/>
     <login-password v-else/>
@@ -39,13 +39,15 @@
     top: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    height: 400px;
+    height: 300px;
     border-radius: 10px;
     z-index: 2;
     padding: 30px;
+    display: grid;
+    grid-template-rows: 1fr 4fr;
     .login-type{
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
     }
   }
 
