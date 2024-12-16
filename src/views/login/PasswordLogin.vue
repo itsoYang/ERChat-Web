@@ -1,19 +1,23 @@
 <script setup lang="ts">
   import { ref } from 'vue'
+  import {login} from "../../api/login/login.ts";
 
-  const phone = ref('')
+  const username = ref('')
   const password = ref('')
 
-  const passwordLogin = () => {
+  const passwordLogin = async () => {
     // 登录
-
+    const {success, data} = await login(username.value, password.value)
+    if (success){
+      console.log('登录Token', data)
+    }
   }
 </script>
 
 <template>
   <div class="password-login">
     <div class="phone">
-      <el-input v-model="phone" placeholder="手机号"></el-input>
+      <el-input v-model="username" placeholder="账号"></el-input>
     </div>
     <div class="verify-code">
       <el-input
