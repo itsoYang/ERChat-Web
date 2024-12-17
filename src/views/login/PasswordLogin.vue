@@ -1,13 +1,18 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import {login} from "../../api/login/login.ts";
+  import bcrypt from 'bcryptjs'
 
   const username = ref('')
   const password = ref('')
 
   const passwordLogin = async () => {
+
+    let salt = bcrypt.genSaltSync(10);
+    let hash = bcrypt.hashSync(password.value, salt);
+    console.log('hash', hash)
     // 登录
-    const {success, data} = await login(username.value, password.value)
+    const {success, data} = await login(username.value, hash)
     if (success){
       console.log('登录Token', data)
     }
