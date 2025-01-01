@@ -16,7 +16,7 @@ const useRegisterPortLayout = () => {
                 return {
                     position: {
                         x: 0,
-                        y: 32 + index * 24 + 12,
+                        y: 32 + index * 24 + 14,
                     },
                     angle: 0,
                 }
@@ -32,7 +32,7 @@ const useRegisterPortLayout = () => {
                 return {
                     position: {
                         x: _.nodeW,
-                        y: 32 + index * 24 + 12,
+                        y: 32 + index * 24 + 14,
                     },
                     angle: 0,
                 }
